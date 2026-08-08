@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════
+  index.html — Portfolio Entry Point
+  Author   : Your Name
+  Purpose  : Part of a multi-page portfolio (split from a single
+             long-scroll page so Projects, Certifications, and
+             Experience each get their own dedicated page instead
+             of competing for space on Home).
+  ═══════════════════════════════════════════════════════
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Your Name | Full Stack Developer</title>
+  <meta name="description" content="Full Stack Developer specializing in building scalable, elegant web applications with React, Node.js, and PostgreSQL. Available for freelance and full-time opportunities." />
+  <meta name="keywords" content="full stack developer, web developer, React, Node.js, JavaScript, TypeScript, PostgreSQL, portfolio, freelance developer" />
+  <meta name="author"    content="Your Name" />
+  <meta name="robots"    content="index, follow" />
+  <link rel="canonical"  href="https://yourportfolio.com/" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://yourportfolio.com/" />
+  <meta property="og:title"       content="Your Name | Full Stack Developer" />
+  <meta property="og:description" content="Full Stack Developer building scalable, elegant web applications. Available for freelance and full-time work." />
+  <meta property="og:image"       content="https://yourportfolio.com/og-image.png" />
+  <meta property="og:locale"      content="en_US" />
+  <meta property="og:site_name"   content="Your Name Portfolio" />
+
+  <meta name="twitter:card"      content="summary_large_image" />
+  <meta name="twitter:url"       content="https://yourportfolio.com/" />
+  <meta name="twitter:title"     content="Your Name | Full Stack Developer" />
+  <meta name="twitter:description" content="Full Stack Developer building scalable, elegant web applications. Available for freelance and full-time work." />
+  <meta name="twitter:image"     content="https://yourportfolio.com/og-image.png" />
+  <meta name="twitter:image:alt" content="Your Name — Full Stack Developer portfolio" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Your Name",
+    "url": "https://yourportfolio.com",
+    "jobTitle": "Full Stack Developer",
+    "description": "Full Stack Developer specializing in React, Node.js, and PostgreSQL.",
+    "knowsAbout": ["React", "Node.js", "TypeScript", "PostgreSQL", "Docker"],
+    "sameAs": [
+      "https://github.com/yourusername",
+      "https://linkedin.com/in/yourusername"
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+  <meta name="theme-color" content="#fafafa" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav role="navigation" aria-label="Main navigation">
+
+    <!-- Logo / home link — wraps in <a> so it's keyboard-focusable -->
+    <a class="nav-logo" href="#hero">
+      <span class="logo-bracket">&lt;</span>yn<span class="logo-bracket">/&gt;</span>
+    </a>
+
+    <!--
+      Nav links list. On Home, in-page sections use "#anchor" hrefs;
+      elsewhere they point at "index.html#anchor" or a dedicated page
+      (e.g. "projects.html") since that content no longer lives here.
+    -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="experience.html">Experience</a></li>
+      <li><a href="#github">GitHub</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="certifications.html">Certifications</a></li>
+      <li><a href="#contact" class="nav-cta">Let's talk</a></li>
+    </ul>
+
+    <button class="cmdk-trigger" id="cmdkTrigger" aria-label="Open command palette (Ctrl+K)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <path d="M21 21l-4.3-4.3"/>
+      </svg>
+      <span class="cmdk-trigger-kbd">Ctrl K</span>
+    </button>
+
+    <button class="theme-toggle" id="themeToggle"
+            aria-label="Toggle dark mode" aria-pressed="false">
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+
+    <button class="hamburger" id="hamburger"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </nav>
+
+  <main>
+
+<!-- ══════════════════════════════════════
+         SECTION 01 — HERO
+         The first thing visitors see. Full-viewport height.
+         aria-labelledby="hero-name" → the h1 acts as the section's label
+         for screen readers, so it reads "hero-name: Your Name" as a landmark.
+    ══════════════════════════════════════ -->
+    <section id="hero" aria-labelledby="hero-name">
+
+      <!-- Large decorative "DEV" text rendered in CSS as outline-only.
+           aria-hidden → purely visual, no semantic meaning -->
+      <div class="hero-bg-text" aria-hidden="true">DEV</div>
+
+      <!-- Two-column content grid: name (left) + description panel (right) -->
+      <div class="hero-content">
+
+        <!-- Availability status badge with animated dot -->
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Available for opportunities
+        </div>
+
+        <!--
+          h1 — THE most important SEO element on the page.
+          Only one h1 per page. Contains your name (primary keyword for
+          personal branding). The <em> creates the italic visual split.
+          id="hero-name" → referenced by section's aria-labelledby
+        -->
+        <h1 id="hero-name" class="hero-name">
+          Your<br /><em>Name</em>
+        </h1>
+
+        <!-- Right panel: role title, bio, and CTA buttons -->
+        <div class="hero-right">
+
+          <!-- Job title — <p> not <h2> since it's decorative, not structural -->
+          <p class="hero-role">Full Stack<br />Developer</p>
+
+          <!-- Short bio — keep this punchy, under 30 words -->
+          <p class="hero-desc">
+            I build end-to-end web applications — polished frontends, robust APIs,
+            and databases that scale. I care about craft, performance, and code that lasts.
+          </p>
+
+          <!-- Call-to-action buttons -->
+          <div class="hero-actions">
+            <!-- Primary CTA → leads to Projects section -->
+            <a href="#projects" class="btn-primary">
+              View work
+              <!-- Arrow icon — aria-hidden since the text already describes the action -->
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+            <!-- Secondary CTA → smooth-scrolls to Contact section -->
+            <a href="#contact" class="btn-ghost">Get in touch</a>
+            <!--
+              MULTI-PAGE ADDITION: résumé download now lives on the
+              dedicated Experience page (it reads the full job timeline
+              to build itself, which no longer lives here on Home) —
+              this button just links there instead of calling
+              window.print() directly. See experience.html.
+            -->
+            <a href="experience.html" class="btn-ghost">
+              Experience &amp; Résumé
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+
+        </div><!-- /hero-right -->
+      </div><!-- /hero-content -->
+
+      <!-- Stats bar + scroll indicator at bottom of hero -->
+      <div class="hero-footer">
+        <!-- Quick social-proof numbers -->
+        <div class="hero-stat">
+          <span class="stat-num">3+</span>
+          <span class="stat-label">Years exp.</span>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-num">20+</span>
+          <span class="stat-label">Projects shipped</span>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-num">10k+</span>
+          <span class="stat-label">Users served</span>
+        </div>
+        <!-- Animated scroll cue — hidden on very small screens (CSS) -->
+        <div class="scroll-hint">
+          <span class="scroll-line"></span>
+          <span>scroll</span>
+        </div>
+      </div><!-- /hero-footer -->
+
+    </section><!-- /hero -->
+
+
+    
+<!-- ══════════════════════════════════════
+         SECTION 02 — ACHIEVEMENTS (Level 5)
+         A quick, scannable credibility strip right after the hero —
+         before asking anyone to read the full Skills/Experience detail.
+         Each badge "unlocks" (pops in) once scrolled into view, staggered
+         left-to-right — see initAchievementsReveal() in main.js.
+    ══════════════════════════════════════ -->
+    <section id="achievements" aria-labelledby="achievements-heading">
+
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 id="achievements-heading">Achievements</h2>
+      </div>
+
+      <!--
+        Icons are inline SVG (same stroke-based style as every other
+        icon on this page) instead of emoji — emoji render inconsistently
+        across OSes/browsers and read as less polished on a professional
+        portfolio.
+      -->
+      <div class="achievements-strip">
+
+        <div class="achievement-badge">
+          <div class="achievement-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+            </svg>
+          </div>
+          <h3 class="achievement-title">100 Days of Code</h3>
+          <p class="achievement-desc">Shipped something and posted about it every day for over 3 months straight.</p>
+        </div>
+
+        <div class="achievement-badge">
+          <div class="achievement-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="6" y1="3" x2="6" y2="15"/>
+              <circle cx="18" cy="6" r="3"/>
+              <circle cx="6" cy="18" r="3"/>
+              <path d="M18 9a9 9 0 0 1-9 9"/>
+            </svg>
+          </div>
+          <h3 class="achievement-title">Open Source Contributor</h3>
+          <p class="achievement-desc">Published a CLI tool as open source — see the case study on the <a href="projects.html">Projects page</a>.</p>
+        </div>
+
+        <div class="achievement-badge">
+          <div class="achievement-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v6M12 22v-6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M16 12h6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/>
+            </svg>
+          </div>
+          <h3 class="achievement-title">4 Portfolio Iterations</h3>
+          <p class="achievement-desc">Rebuilt this site top-to-bottom four times, chasing a genuinely better version each time.</p>
+        </div>
+
+        <div class="achievement-badge">
+          <div class="achievement-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h3 class="achievement-title">Hackathon Ready</h3>
+          <p class="achievement-desc">Missed my first hackathon window — used the momentum to level up this portfolio instead.</p>
+        </div>
+
+      </div><!-- /achievements-strip -->
+    
+      <div class="teaser-cta">
+        <a class="teaser-cta-link" href="certifications.html">
+          View achievements &amp; certifications
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </section><!-- /achievements -->
+
+
+    
+<!-- ══════════════════════════════════════
+         SECTION — SKILLS (Home teaser)
+         MULTI-PAGE ADDITION: replaces the old 4-card proficiency grid
+         with a compact, grouped icon strip. There's no dedicated Skills
+         page to link out to — this simplified view *is* the whole
+         thing, just without the self-rated 1-5 bars, which didn't earn
+         their space back on a page meant to convert, not audit.
+         syncSkillIcons() in main.js still rebuilds each icon's src on
+         theme toggle via the same data-icon attribute as before.
+    ══════════════════════════════════════ -->
+    <section id="skills" aria-labelledby="skills-heading">
+
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 id="skills-heading">Skills &amp; Stack</h2>
+      </div>
+
+      <div class="skills-strip">
+        <div class="skills-strip-group">
+          <span class="skills-strip-label">Frontend</span>
+          <span class="skills-strip-chips">
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="react" src="https://skillicons.dev/icons?i=react&theme=light" alt="" width="16" height="16" loading="lazy" />
+            React
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="nextjs" src="https://skillicons.dev/icons?i=nextjs&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Next.js
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="ts" src="https://skillicons.dev/icons?i=ts&theme=light" alt="" width="16" height="16" loading="lazy" />
+            TypeScript
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="tailwind" src="https://skillicons.dev/icons?i=tailwind&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Tailwind CSS
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="figma" src="https://skillicons.dev/icons?i=figma&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Figma
+          </span>
+          </span>
+        </div>
+
+        <div class="skills-strip-group">
+          <span class="skills-strip-label">Backend</span>
+          <span class="skills-strip-chips">
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="nodejs" src="https://skillicons.dev/icons?i=nodejs&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Node.js
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="express" src="https://skillicons.dev/icons?i=express&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Express
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="graphql" src="https://skillicons.dev/icons?i=graphql&theme=light" alt="" width="16" height="16" loading="lazy" />
+            GraphQL
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="py" src="https://skillicons.dev/icons?i=py&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Python
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="socketio" src="https://skillicons.dev/icons?i=socketio&theme=light" alt="" width="16" height="16" loading="lazy" />
+            WebSockets
+          </span>
+          </span>
+        </div>
+
+        <div class="skills-strip-group">
+          <span class="skills-strip-label">Database</span>
+          <span class="skills-strip-chips">
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="postgres" src="https://skillicons.dev/icons?i=postgres&theme=light" alt="" width="16" height="16" loading="lazy" />
+            PostgreSQL
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="mongodb" src="https://skillicons.dev/icons?i=mongodb&theme=light" alt="" width="16" height="16" loading="lazy" />
+            MongoDB
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="redis" src="https://skillicons.dev/icons?i=redis&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Redis
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="prisma" src="https://skillicons.dev/icons?i=prisma&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Prisma ORM
+          </span>
+          </span>
+        </div>
+
+        <div class="skills-strip-group">
+          <span class="skills-strip-label">Tools &amp; Ops</span>
+          <span class="skills-strip-chips">
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="git" src="https://skillicons.dev/icons?i=git&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Git
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="github" src="https://skillicons.dev/icons?i=github&theme=light" alt="" width="16" height="16" loading="lazy" />
+            GitHub
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="docker" src="https://skillicons.dev/icons?i=docker&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Docker
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="actions" src="https://skillicons.dev/icons?i=actions&theme=light" alt="" width="16" height="16" loading="lazy" />
+            CI/CD
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="vercel" src="https://skillicons.dev/icons?i=vercel&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Vercel
+          </span>
+          <span class="skill-chip">
+            <img class="skill-chip-icon skill-row-icon" data-icon="linux" src="https://skillicons.dev/icons?i=linux&theme=light" alt="" width="16" height="16" loading="lazy" />
+            Linux
+          </span>
+          </span>
+        </div>
+      </div><!-- /skills-strip -->
+    </section><!-- /skills -->
+
+
+    
+<!-- ══════════════════════════════════════
+         SECTION — EXPERIENCE (Home teaser)
+         MULTI-PAGE ADDITION: shows only the current role. The full
+         reverse-chronological timeline (plus every past role's Key
+         achievements toggle, plus the downloadable résumé) lives on
+         the dedicated Experience page — see experience.html.
+    ══════════════════════════════════════ -->
+    <section id="experience" aria-labelledby="exp-heading">
+
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 id="exp-heading">Experience</h2>
+      </div>
+
+      <div class="timeline">
+<article class="exp-item exp-item--current fade-in">
+          <!-- Numbered badge on the timeline line -->
+          <div class="exp-badge" aria-hidden="true">01</div>
+          <!-- Role title + date range on same row, wraps on mobile -->
+          <div class="exp-meta">
+            <h3 class="exp-role">
+              Full Stack Developer
+              <span class="exp-current-tag">Current</span>
+            </h3>
+            <span class="exp-period">2023 — Present</span>
+          </div>
+          <p class="exp-company">Company Name · Full-time</p>
+          <p class="exp-desc">
+            Built and maintained multiple client-facing applications from scratch.
+            Led frontend architecture decisions, optimized API response times by 40%,
+            and shipped a real-time notification system used by 10k+ users.
+          </p>
+          <!-- Tech stack tags for this role -->
+          <div class="exp-tags">
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">Docker</span>
+          </div>
+
+          <!--
+            KEY ACHIEVEMENTS — Level 4.1 addition
+            Collapsed by default; tapping the toggle reveals 2-3 concrete,
+            specific wins beyond the one-paragraph summary above. Same
+            0fr→1fr grid animation as the case study accordion, for the
+            same reason: no JS height-measuring needed.
+          -->
+        </article>
+      </div><!-- /timeline -->
+
+      <div class="teaser-cta">
+        <a class="teaser-cta-link" href="experience.html">
+          View full experience &amp; résumé
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </section><!-- /experience -->
+
+
+    
+    <!-- ══════════════════════════════════════
+         SECTION — PROJECTS (Home teaser)
+         MULTI-PAGE ADDITION: shows featured projects only, with case
+         study buttons removed — the full grid (with category filters
+         and every case study) lives on the dedicated Projects page.
+    ══════════════════════════════════════ -->
+    <section id="projects" aria-labelledby="projects-heading">
+
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 id="projects-heading">Featured Projects</h2>
+      </div>
+
+      <div class="projects-grid">
+<article class="project-card project-card--featured" data-category="fullstack frontend backend">
+          <div class="project-header">
+            <span class="project-num">01</span>
+            <div class="project-links">
+              <!-- target="_blank" opens in new tab; rel="noopener" prevents
+                   the new tab from accessing window.opener (security best practice) -->
+              <a href="#" class="project-link" target="_blank"
+                 rel="noopener noreferrer" aria-label="View Project Alpha live site">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                Live
+              </a>
+              <a href="#" class="project-link" target="_blank"
+                 rel="noopener noreferrer" aria-label="View Project Alpha on GitHub">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+                GitHub
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">Project Alpha</h3>
+          <p class="project-desc">
+            A full-stack SaaS dashboard with authentication, billing, and real-time
+            data visualization. Built from scratch to production in 6 weeks.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">Next.js</span>
+            <span class="tag">Stripe</span>
+            <span class="tag">Postgres</span>
+          </div>
+          <!--
+            CASE STUDY — Level 4 addition
+            The button opens #caseStudyModal and copies in the hidden
+            .case-study-content block below it. Kept inside the same
+            <article> as its project so the two never drift out of
+            sync when cards are reordered or duplicated for new projects.
+          -->
+        </article>
+
+
+<article class="project-card" data-category="backend opensource">
+          <div class="project-header">
+            <span class="project-num">02</span>
+            <div class="project-links">
+              <a href="#" class="project-link" target="_blank"
+                 rel="noopener noreferrer" aria-label="View CLI Tool on GitHub">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+                GitHub
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">Open Source CLI Tool</h3>
+          <p class="project-desc">
+            Auto-generates TypeScript types from REST API responses.
+            Picked up 400+ GitHub stars in the first month.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">TypeScript</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">CLI</span>
+          </div>
+        </article>
+
+
+<article class="project-card" data-category="frontend fullstack">
+          <div class="project-header">
+            <span class="project-num">03</span>
+            <div class="project-links">
+              <a href="#" class="project-link" target="_blank"
+                 rel="noopener noreferrer" aria-label="View E-commerce Platform live site">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                Live
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">E-commerce Platform</h3>
+          <p class="project-desc">
+            Headless store with custom CMS, inventory management, and payment processing.
+            Handles 500+ orders per day.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">React</span>
+            <span class="tag">Sanity</span>
+            <span class="tag">Stripe</span>
+          </div>
+        </article>
+
+
+      </div><!-- /projects-grid -->
+
+      <div class="teaser-cta">
+        <a class="teaser-cta-link" href="projects.html">
+          View all projects
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </section><!-- /projects -->
+
+
+    
+<!-- ══════════════════════════════════════
+         SECTION 04 — GITHUB ACTIVITY (Level 4)
+         Live data pulled client-side from the public GitHub REST API
+         (no auth token — unauthenticated requests are capped at 60/hr
+         per IP, which is plenty for a personal portfolio's traffic).
+         See initGithubStats() in main.js. Degrades to a plain
+         "view on GitHub" link if the fetch fails or rate-limits.
+    ══════════════════════════════════════ -->
+    <section id="github" aria-labelledby="github-heading">
+
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 id="github-heading">GitHub Activity</h2>
+      </div>
+
+      <!--
+        GITHUB_USERNAME is set once in main.js (top of initGithubStats)
+        — change it there, not here, if this template gets reused.
+      -->
+      <div class="github-card fade-in" id="githubCard">
+
+        <!-- Skeleton/loading state — shown until the fetch resolves,
+             swapped out by JS once real data (or an error) arrives -->
+        <div class="github-loading" id="githubLoading">
+          <div class="gh-skel gh-skel--avatar"></div>
+          <div class="gh-skel-lines">
+            <div class="gh-skel gh-skel--line" style="width:40%"></div>
+            <div class="gh-skel gh-skel--line" style="width:70%"></div>
+          </div>
+        </div>
+
+        <!-- Populated by JS on success; hidden (display:none) until then -->
+        <div class="github-body" id="githubBody" hidden>
+
+          <div class="github-profile">
+            <img class="github-avatar" id="githubAvatar" src="" alt="" width="56" height="56" />
+            <div>
+              <p class="github-name" id="githubName">—</p>
+              <a class="github-handle" id="githubHandle" href="#" target="_blank" rel="noopener">—</a>
+            </div>
+            <a class="btn-ghost github-follow" id="githubFollow" href="#" target="_blank" rel="noopener">
+              Follow
+            </a>
+          </div>
+
+          <!--
+            CONTRIBUTION GRAPH — Level 4.1 refinement
+            Was previously a static <img> from ghchart.rshah.org, but that
+            service only ever renders a fixed "last 12 months" image — no
+            way to narrow the range. Replaced with a custom-built calendar:
+            we fetch raw daily contribution counts as JSON from
+            github-contributions-api.jogruber.de (a free, public, no-auth
+            mirror of GitHub's contribution data — GitHub's own official
+            API only exposes this via authenticated GraphQL, which isn't
+            safe to call from a static client-side site), then render our
+            own grid of day-cells and filter it entirely in the browser.
+            See initContribGraph() / renderContribGrid() in main.js.
+          -->
+          <div class="github-contrib">
+            <div class="contrib-header">
+              <p class="github-contrib-label">Contribution activity</p>
+              <!--
+                Range filter — purely a client-side re-render, no new
+                network request. "range" values are in months, "custom"
+                reveals the two <input type="month"> pickers below.
+              -->
+              <div class="contrib-filters" role="group" aria-label="Filter contribution range">
+                <button class="contrib-filter-pill" data-range="3">3M</button>
+                <button class="contrib-filter-pill active" data-range="6">6M</button>
+                <button class="contrib-filter-pill" data-range="12">12M</button>
+                <button class="contrib-filter-pill" data-range="custom">Custom</button>
+              </div>
+            </div>
+
+            <!--
+              Shown only when "Custom" is selected. Two buttons, each
+              opening the same popover calendar below — tap "From" or
+              "To", pick a month off the grid, done. (This replaced an
+              earlier version using <select> dropdowns, which worked
+              but wasn't the "tap a button, a calendar opens" picker
+              feel being asked for.)
+            -->
+            <div class="contrib-custom-range" id="contribCustomRange" hidden>
+              <div class="contrib-range-fields-row">
+                <div class="contrib-range-field">
+                  <span class="contrib-range-label">From</span>
+                  <button type="button" class="contrib-month-btn" id="contribFromBtn"></button>
+                </div>
+                <div class="contrib-range-field">
+                  <span class="contrib-range-label">To</span>
+                  <button type="button" class="contrib-month-btn" id="contribToBtn"></button>
+                </div>
+                <button type="button" class="btn-ghost contrib-apply" id="contribApply">Apply</button>
+              </div>
+
+              <!--
+                Shared popover — whichever button (From/To) was tapped
+                sets initContribGraph()'s `activeField` in main.js, and
+                this same panel is reused for both rather than having
+                two separate calendars in the DOM.
+              -->
+              <div class="contrib-month-popover" id="contribMonthPopover" hidden>
+                <div class="contrib-month-popover-header">
+                  <button type="button" class="contrib-month-nav" id="contribYearPrev" aria-label="Previous year">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                  </button>
+                  <span class="contrib-month-popover-year" id="contribPopoverYear"></span>
+                  <button type="button" class="contrib-month-nav" id="contribYearNext" aria-label="Next year">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                  </button>
+                </div>
+                <div class="contrib-month-popover-grid" id="contribPopoverGrid"></div>
+              </div>
+            </div>
+
+            <div class="github-contrib-wrap">
+              <div class="gh-skel gh-skel--contrib" id="githubContribSkeleton"></div>
+              <div class="contrib-calendar" id="contribCalendar" hidden>
+                <div class="contrib-months" id="contribMonths"></div>
+                <div class="contrib-grid" id="contribGrid"></div>
+              </div>
+            </div>
+
+            <!-- Updates on every filter change; also shows the currently
+                 tapped/hovered day's exact count (mobile has no hover, so
+                 tapping a cell is how this actually gets read on a phone) -->
+            <p class="contrib-summary" id="contribSummary" hidden></p>
+
+            <p class="github-contrib-fallback" id="githubContribFallback" hidden>
+              Live contribution graph is unavailable right now —
+              <a id="githubContribFallbackLink" href="#" target="_blank" rel="noopener">view it on GitHub</a>.
+            </p>
+          </div>
+
+          <div class="github-stats-row">
+            <div class="github-stat">
+              <span class="github-stat-num" id="githubRepos">—</span>
+              <span class="github-stat-label">Public repos</span>
+            </div>
+            <div class="github-stat">
+              <span class="github-stat-num" id="githubFollowers">—</span>
+              <span class="github-stat-label">Followers</span>
+            </div>
+            <div class="github-stat">
+              <span class="github-stat-num" id="githubStars">—</span>
+              <span class="github-stat-label">Total stars</span>
+            </div>
+          </div>
+
+          <!-- Top repos by stars — populated as a list of .github-repo rows -->
+          <div class="github-repos" id="githubRepoList" aria-label="Top repositories by stars"></div>
+
+        </div><!-- /github-body -->
+
+        <!-- Shown instead of github-body if the API call fails
+             (rate-limited, offline, username typo, etc.) -->
+        <div class="github-error" id="githubError" hidden>
+          <p>Couldn't load live GitHub stats right now.</p>
+          <a href="#" id="githubErrorLink" target="_blank" rel="noopener" class="btn-ghost">
+            View profile on GitHub
+          </a>
+        </div>
+
+      </div><!-- /github-card -->
+    </section><!-- /github -->
+
+
+    
+<!-- ══════════════════════════════════════
+         SECTION — TESTIMONIALS (Level 5)
+         Simple index-based carousel — one slide visible at a time via
+         the .active class (not display toggling), so the CSS opacity
+         transition has something to animate between. Wired up by
+         initTestimonialsCarousel() in main.js: prev/next arrows, dot
+         indicators, and basic touch-swipe support since this is meant
+         to be demoed on mobile.
+    ══════════════════════════════════════ -->
+    <section id="testimonials" aria-labelledby="testimonials-heading">
+
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 id="testimonials-heading">What People Say</h2>
+      </div>
+
+      <div class="testimonials-carousel">
+        <div class="testimonial-track" id="testimonialsTrack">
+
+          <blockquote class="testimonial-slide">
+            <p class="testimonial-quote">
+              "Genuinely one of the most reliable people on our hackathon team —
+              picked up the backend work nobody else wanted and had it working
+              before we'd even finished arguing about the schema."
+            </p>
+            <footer class="testimonial-author">
+              <!--
+                Generic silhouette icon, not a photo — deliberately so.
+                Pairing a real (or real-looking) human photo with a
+                fabricated name + quote is the "fake review" pattern,
+                and that risk doesn't go away just because it's meant
+                to be swapped later — placeholders have a way of
+                slipping into production. Replace this whole <span>
+                with a real <img src="..."> once this is a real quote
+                from a real person.
+              -->
+              <span class="testimonial-avatar" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
+              <span class="testimonial-author-text">
+                <span class="testimonial-name">Placeholder Name</span>
+                <span class="testimonial-role">Hackathon teammate</span>
+              </span>
+            </footer>
+          </blockquote>
+
+          <blockquote class="testimonial-slide">
+            <p class="testimonial-quote">
+              "Delivered the storefront rebuild ahead of schedule and actually
+              explained the tradeoffs in plain English instead of just
+              disappearing into the code. Would work with again."
+            </p>
+            <footer class="testimonial-author">
+              <span class="testimonial-avatar" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
+              <span class="testimonial-author-text">
+                <span class="testimonial-name">Placeholder Client</span>
+                <span class="testimonial-role">Freelance client</span>
+              </span>
+            </footer>
+          </blockquote>
+
+          <blockquote class="testimonial-slide">
+            <p class="testimonial-quote">
+              "Explains things well enough that I actually understood our own
+              codebase better after pairing with them for an afternoon."
+            </p>
+            <footer class="testimonial-author">
+              <span class="testimonial-avatar" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
+              <span class="testimonial-author-text">
+                <span class="testimonial-name">Placeholder Classmate</span>
+                <span class="testimonial-role">Classmate / study group</span>
+              </span>
+            </footer>
+          </blockquote>
+
+        </div><!-- /testimonial-track -->
+
+        <div class="testimonials-controls">
+          <button type="button" class="testimonial-nav" id="testimonialPrev" aria-label="Previous testimonial">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div class="testimonials-dots" id="testimonialsDots"></div>
+          <button type="button" class="testimonial-nav" id="testimonialNext" aria-label="Next testimonial">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div><!-- /testimonials-carousel -->
+    </section><!-- /testimonials -->
+
+
+    
+<!-- ══════════════════════════════════════
+         SECTION 06 — CONTACT
+         Two-column layout: info left, form right.
+         The form submits via EmailJS (no backend required).
+         novalidate → disables native browser validation UI so our
+                      custom JS validation in main.js handles it instead
+                      (gives us full control over error messages + styling).
+    ══════════════════════════════════════ -->
+    <section id="contact" aria-labelledby="contact-heading">
+
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 id="contact-heading">Get in Touch</h2>
+      </div>
+
+      <div class="contact-inner fade-in">
+
+        <!-- LEFT: Intro text + social links -->
+        <div class="contact-left">
+          <p class="contact-headline">Let's build something <em>great</em> together.</p>
+          <p class="contact-sub">
+            Whether you have a project, a role to fill, or just want to talk about
+            tech — my inbox is open.
+          </p>
+
+          <!-- Social / direct contact links
+               Each aria-label provides a full description since the visible
+               text is just a URL string, not descriptive enough on its own. -->
+          <ul class="contact-social">
+
+            <li>
+              <!-- mailto: opens the user's default email client -->
+              <a href="mailto:you@email.com" aria-label="Send me an email">
+                <span class="social-icon" aria-hidden="true">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="1.5"
+                       stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                  </svg>
+                </span>
+                you@email.com
+              </a>
+            </li>
+
+            <li>
+              <a href="https://github.com/yourusername" target="_blank"
+                 rel="noopener noreferrer" aria-label="Visit my GitHub profile">
+                <span class="social-icon" aria-hidden="true">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="1.5"
+                       stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                  </svg>
+                </span>
+                github.com/yourusername
+              </a>
+            </li>
+
+            <li>
+              <a href="https://linkedin.com/in/yourusername" target="_blank"
+                 rel="noopener noreferrer" aria-label="Visit my LinkedIn profile">
+                <span class="social-icon" aria-hidden="true">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="1.5"
+                       stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                    <rect x="2" y="9" width="4" height="12"/>
+                    <circle cx="4" cy="4" r="2"/>
+                  </svg>
+                </span>
+                linkedin.com/in/yourusername
+              </a>
+            </li>
+
+          </ul>
+        </div><!-- /contact-left -->
+
+        <!-- RIGHT: EmailJS-powered contact form
+             id="contactForm"   → JS targets this to attach submit handler
+             novalidate         → disables browser's built-in validation popups
+                                  so our custom JS can handle errors gracefully
+        -->
+        <form class="contact-form" id="contactForm" novalidate>
+
+          <!-- Name + Email in a 2-column row (stacks to 1 on mobile) -->
+          <div class="form-row">
+            <div class="form-group">
+              <!-- for="from_name" ties label to input for accessibility click & screen reader -->
+              <label for="from_name">Name</label>
+              <!-- name="from_name" → must match the EmailJS template variable {{from_name}} -->
+              <input type="text" id="from_name" name="from_name"
+                     placeholder="Jane Smith"
+                     required autocomplete="name" />
+            </div>
+            <div class="form-group">
+              <label for="reply_to">Email</label>
+              <!-- name="reply_to" → EmailJS uses this as the reply-to address -->
+              <input type="email" id="reply_to" name="reply_to"
+                     placeholder="jane@example.com"
+                     required autocomplete="email" />
+            </div>
+          </div>
+
+          <!-- Subject line -->
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject"
+                   placeholder="Project inquiry" required />
+          </div>
+
+          <!-- Message body — textarea allows multi-line input -->
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message"
+                      placeholder="Tell me about your project or idea..."
+                      required></textarea>
+          </div>
+
+          <!-- Submit + status feedback row -->
+          <div class="form-footer">
+
+            <!-- Submit button
+                 id="submitBtn" → JS disables this during send to prevent double-submit
+                 type="submit"  → triggers form's submit event (handled by JS) -->
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <span id="btnText">Send message</span>
+              <!-- Send icon — aria-hidden, button text already describes action -->
+              <svg id="btnIcon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+
+            <!--
+              Status message shown after submit attempt.
+              role="status"    → announces content to screen readers without interrupting
+              aria-live="polite" → screen reader reads it aloud when it changes
+              JS adds .success or .error class to show/style it appropriately
+            -->
+            <span class="form-status" id="formStatus"
+                  role="status" aria-live="polite"></span>
+
+          </div><!-- /form-footer -->
+        </form><!-- /contactForm -->
+
+      </div><!-- /contact-inner -->
+    </section><!-- /contact -->
+
+  </main>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+       Minimal 3-column layout: logo · copyright · stack credit
+       Wraps to single column on mobile (CSS).
+  ══════════════════════════════════════════ -->
+  <footer>
+    <!-- Repeat the logo for brand consistency at page bottom -->
+    <p class="footer-logo">
+      <span class="logo-bracket">&lt;</span>yn<span class="logo-bracket">/&gt;</span>
+    </p>
+    <p class="footer-copy">© 2025 Your Name · Crafted with care</p>
+    <!-- Brief tech credit — also useful for recruiters skimming source -->
+    <p class="footer-stack">HTML · CSS · JS</p>
+    <!--
+      VISITOR COUNTER — Level 5 addition
+      Starts hidden; initVisitorCounter() in main.js only reveals it
+      once the real count comes back successfully (or leaves it hidden
+      permanently if the free counting API is unreachable — a missing
+      visitor count just isn't worth showing an error state for).
+    -->
+    <!--
+      VISITOR COUNTER — Level 5 addition (rebuilt)
+      Was originally a fetch() call to countapi.xyz — that service has
+      actually shut down, which is exactly why nothing ever appeared
+      (our own error-handling was correctly hiding it, just against a
+      dead API). Rebuilt as a plain <img> pointed at visitorbadge.io
+      instead: no fetch, no JSON, no CORS to worry about — same
+      "free public image service" pattern as the skillicons/ghchart
+      logos elsewhere on this page, which have been solid so far.
+    -->
+    <img class="visitor-counter" id="visitorCounter"
+         alt="Visitor count"
+         src="https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fcomsolodev-1.github.io%2FLevel4_Portfolio%2F&labelColor=%23252525&countColor=%23636363&style=flat&labelStyle=none"
+         hidden />
+    <!-- ↑ the `path=` value is your live site URL, URL-encoded. Update
+         it here if you rename the repo/site — otherwise it'll keep
+         counting hits for the OLD url instead of wherever this
+         actually ends up living. (main.js just wires up show/hide,
+         the URL itself lives only here — one source of truth.) -->
+  </footer>
+
+<!--
+    CUSTOM CURSOR LABEL — Level 3 addition
+    A single floating pill that follows the pointer and reads "View →"
+    while hovering a .project-card. Positioned/shown entirely by JS
+    (see initCustomCursor in main.js). aria-hidden because it's purely
+    decorative — the underlying card/link already describes the action.
+    Only activated on fine-pointer (mouse) devices; touch devices never
+    see it, so it never gets in the way on mobile.
+  -->
+  <div class="cursor-label" id="cursorLabel" aria-hidden="true">View project</div>
+
+  <!--
+    main.js loaded at end of <body> (not in <head>) for two reasons:
+    1. DOM is fully parsed before the script runs — no need for DOMContentLoaded workarounds
+    2. Page renders visually before JS is parsed — faster perceived load time
+    Note: EmailJS SDK IS in <head> because main.js calls emailjs.init() immediately on load.
+  -->
+  <!--
+    COMMAND PALETTE — Level 4 addition
+    Hidden by default (the [hidden] attribute). initCommandPalette() in
+    main.js toggles it via Cmd/Ctrl+K or the #cmdkTrigger button, filters
+    .cmdk-item rows as you type, and handles Up/Down/Enter/Esc.
+    role="dialog" + aria-modal so screen readers treat it as a proper
+    modal rather than page content that happens to be on top.
+
+    MULTI-PAGE ADDITION: data-href is either a same-page anchor ("#...")
+    which still smooth-scrolls, or a cross-page link ("projects.html",
+    "index.html#skills") which main.js now navigates to directly —
+    see the updated activate() logic in initCommandPalette().
+  -->
+  <div class="cmdk-overlay" id="cmdkOverlay" hidden>
+    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="cmdk-input-row">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M21 21l-4.3-4.3"/>
+        </svg>
+        <input type="text" id="cmdkInput" class="cmdk-input"
+               placeholder="Jump to a page or section…"
+               autocomplete="off" spellcheck="false" />
+        <kbd class="cmdk-esc">Esc</kbd>
+      </div>
+
+      <ul class="cmdk-list" id="cmdkList">
+        <li class="cmdk-item" data-href="#hero" data-keywords="home top start">
+          <span class="cmdk-item-label">Home</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="#achievements" data-keywords="badges milestones">
+          <span class="cmdk-item-label">Achievements</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="#skills" data-keywords="frontend backend database tools stack">
+          <span class="cmdk-item-label">Skills</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="#experience" data-keywords="work jobs history timeline current role">
+          <span class="cmdk-item-label">Experience (current role)</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="experience.html" data-keywords="work jobs history timeline resume cv download">
+          <span class="cmdk-item-label">Experience & Résumé</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="projects.html" data-keywords="work portfolio case study">
+          <span class="cmdk-item-label">Projects</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="certifications.html" data-keywords="credentials courses badges milestones achievements">
+          <span class="cmdk-item-label">Certifications & Achievements</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="#github" data-keywords="repos stars followers code activity">
+          <span class="cmdk-item-label">GitHub Activity</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="#testimonials" data-keywords="reviews quotes recommendations">
+          <span class="cmdk-item-label">Testimonials</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="#contact" data-keywords="email message hire talk">
+          <span class="cmdk-item-label">Contact</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-filter="theme-toggle" data-keywords="dark light mode theme">
+          <span class="cmdk-item-label">Toggle dark / light mode</span>
+          <span class="cmdk-item-hint">Action</span>
+        </li>
+      </ul>
+
+      <p class="cmdk-empty" id="cmdkEmpty" hidden>No matches — try a different word.</p>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</html>

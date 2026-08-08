@@ -1,0 +1,4002 @@
+/* ═══════════════════════════════════════════════════════════════
+   PORTFOLIO — style.css
+   ─────────────────────────────────────────────────────────────
+   Palette     : Black · White · Gray only (9-stop scale)
+   Fonts       : Syne (display) · Epilogue (body) · JetBrains Mono
+   Cross-browser: Chrome, Firefox, Safari, Edge, iOS Safari, Android
+   Responsive  : 320px (very small) → 1280px+ (wide desktop)
+   ─────────────────────────────────────────────────────────────
+   TABLE OF CONTENTS
+     1.  Reset           — normalize defaults across all browsers
+     2.  Design Tokens   — CSS custom properties (palette, type, layout)
+     3.  Base            — body, noise overlay
+     4.  Nav             — fixed top bar, hamburger
+     5.  Section Base    — shared section padding + heading styles
+     6.  Hero            — full-viewport intro section
+     7.  Buttons         — .btn-primary, .btn-ghost
+     8.  Skills          — 4-column card grid
+     9.  Experience      — vertical timeline
+    10.  Projects        — 3-column card grid
+    11.  Contact         — 2-column layout + EmailJS form
+    12.  Footer
+    13.  Fade-in         — scroll animation + prefers-reduced-motion
+    14.  Responsive      — breakpoints: 769 / 900 / 768 / 480 / 360 / 1280px
+    15.  Print
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. RESET — normalize defaults across all browsers ── */
+
+/*
+  box-sizing: border-box → padding and border are included in the element's
+  stated width/height. Without this, adding padding to an input makes it
+  wider than its container — a common layout bug.
+  Applied to ::before and ::after pseudo-elements too (they default to content-box).
+*/
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box; /* Safari ≤ 8, older Android */
+          box-sizing: border-box;
+  margin: 0;  /* Remove browser default margins (e.g. h1–h6, p, body) */
+  padding: 0; /* Remove browser default padding (e.g. ul, ol) */
+}
+
+html {
+  /*
+    text-size-adjust: 100%
+    iOS Safari auto-inflates font sizes when the device is rotated to landscape
+    and the content was originally designed for portrait. 100% disables this.
+    -webkit- prefix for Safari/Chrome; -ms- for IE 11.
+  */
+  -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+
+  /*
+    scroll-behavior: smooth → CSS-driven smooth scrolling for anchor links
+    (e.g. href="#skills"). Works in all modern browsers.
+    For browsers that don't support it, clicking a nav link just jumps
+    instantly — still functional, just not smooth.
+    Note: prefers-reduced-motion media query at the bottom overrides this
+    to 'auto' for users who prefer less motion.
+  */
+  scroll-behavior: smooth;
+}
+
+img, svg {
+  display: block;    /* Removes the 3–4px gap below images (inline baseline spacing) */
+  max-width: 100%;   /* Prevents images from overflowing their containers */
+}
+
+/*
+  font: inherit → by default, browsers give form elements (input, textarea,
+  button, select) their own font stack, separate from the body. This resets
+  them to inherit the page font so they match everything else.
+  color: inherit → same issue; form elements default to a different text color
+  on some browsers (notably iOS Safari).
+*/
+button, input, textarea, select {
+  font:  inherit;
+  color: inherit;
+}
+
+button { cursor: pointer; } /* Ensures button always shows pointer, even without href */
+
+a { color: inherit; } /* Prevents links from defaulting to blue — we control colors via CSS */
+
+ul, ol { list-style: none; } /* Remove default bullets/numbers from all lists */
+
+/* ── 2. DESIGN TOKENS ── */
+/*
+  CSS Custom Properties defined on :root are globally accessible.
+  Using tokens (variables) instead of raw values means you can
+  change the whole palette in one place, not hunt through 1000 lines.
+  --gray-50 through --gray-900 follow the Tailwind gray-zinc scale.
+*/
+:root {
+  /* ── Grayscale palette — 9 stops from near-white to near-black ── */
+  --white:        #ffffff;
+  --gray-50:      #fafafa; /* Page background — slightly off-white, easier on eyes */
+  --gray-100:     #f4f4f5; /* Surface 2, tags, subtle backgrounds */
+  --gray-150:     #ebebed; /* Soft borders — lighter than --border */
+  --gray-200:     #e4e4e7; /* Default border color */
+  --gray-300:     #d1d1d6; /* Muted decorative lines */
+  --gray-400:     #a1a1aa; /* Faint text, placeholder-level */
+  --gray-500:     #71717a; /* Muted body text, secondary descriptions */
+  --gray-600:     #52525b; /* Mid-level text */
+  --gray-700:     #3f3f46; /* Hover states for dark elements */
+  --gray-800:     #27272a; /* Near-black, used for hover on dark cards */
+  --gray-900:     #18181b; /* Primary dark: buttons, featured card, nav CTA */
+  --black:        #09090b; /* Pure near-black — reserved for extreme contrast needs */
+
+  /* ── Semantic aliases — use these in component styles, not raw grays ──
+     If you ever add a dark mode, you only update these aliases, not every rule. */
+  --bg:           var(--gray-50);   /* Page background */
+  --surface:      var(--white);     /* Card / form backgrounds */
+  --surface-2:    var(--gray-100);  /* Inset / alternate surface */
+  --text-primary: var(--gray-900);  /* Headings, main content */
+  --text-mid:     var(--gray-600);  /* Labels, secondary headings */
+  --text-muted:   var(--gray-500);  /* Body descriptions */
+  --text-faint:   var(--gray-400);  /* Timestamps, placeholders, hints */
+  --border:       var(--gray-200);  /* Default divider/border */
+  --border-soft:  var(--gray-150);  /* Subtle section dividers */
+
+  /* ── Feedback colors — only non-gray colors in the palette ── */
+  --success:      #166534; /* Dark green text for success messages */
+  --success-bg:   #dcfce7; /* Light green background */
+  --error:        #991b1b; /* Dark red text for error messages */
+  --error-bg:     #fee2e2; /* Light red background */
+
+  /* ── Typography — three-font system ──
+     display → Syne: geometric, high-weight. Used for headings & hero name.
+     body    → Epilogue: humanist, readable at small sizes. Used for all body copy.
+     mono    → JetBrains Mono: clear, developer-aesthetic. Used for labels, tags, dates. */
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'Epilogue', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  /* ── Layout ── */
+  --max-w:  960px; /* Max content width — wider on 1280px+ screens (overridden in @media) */
+  --nav-h:  64px;  /* Fixed nav height — used to offset section padding-top */
+  --r:      10px;  /* Base border-radius for inputs, icon boxes */
+  --r-lg:   16px;  /* Large border-radius for cards, skill grid */
+
+  /* ── Nav background — separate token so dark mode can swap it
+       without touching the nav rule itself (see [data-theme="dark"] below) ── */
+  --nav-bg: rgba(250, 250, 250, 0.88);
+
+  /* ── Noise overlay opacity — dark mode uses a slightly stronger grain
+       since dark flat surfaces show banding more than light ones ── */
+  --noise-opacity: 0.022;
+}
+
+/* ── 2b. DARK THEME — activated via [data-theme="dark"] on <html> ──
+   Only the semantic aliases are redefined here, never the raw --gray-*
+   scale itself — that's exactly why the aliases exist (see comment above).
+   Toggled by JS (initThemeToggle in main.js), persisted in localStorage,
+   and defaults to the visitor's OS preference on first visit. */
+[data-theme="dark"] {
+  --bg:           var(--black);
+  --surface:      var(--gray-900);
+  --surface-2:    var(--gray-800);
+  --text-primary: var(--gray-50);
+  --text-mid:     var(--gray-300);
+  --text-muted:   var(--gray-400);
+  --text-faint:   var(--gray-600);
+  --border:       var(--gray-700);
+  --border-soft:  var(--gray-800);
+
+  --nav-bg:        rgba(9, 9, 11, 0.85);
+  --noise-opacity: 0.035;
+
+  /* Feedback colors get lighter backgrounds so text stays readable on dark surfaces */
+  --success-bg:   rgba(22, 101, 52, 0.25);
+  --error-bg:     rgba(153, 27, 27, 0.25);
+}
+
+/* Smooth crossfade instead of an instant, jarring flip whenever the
+   theme changes. Applied broadly but kept to color-related properties
+   only, so layout/animation performance elsewhere is unaffected. */
+body, nav, .skill-card, .project-card, .exp-item, .contact-form,
+input, textarea, .theme-toggle, .filter-pill, .tag {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+/* ── 3. BASE ── */
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.65; /* Slightly looser than default (1.5) for readability */
+  -webkit-font-smoothing: antialiased;    /* macOS/iOS: renders fonts with thinner strokes */
+  -moz-osx-font-smoothing: grayscale;    /* Firefox on macOS: same effect */
+  overflow-x: hidden; /* Prevents horizontal scrollbar from wide absolutely-positioned elements */
+  min-width: 320px;   /* Prevents layout collapse below iPhone SE width */
+}
+
+/*
+  Noise overlay
+  ─────────────
+  A fixed full-screen element that renders a subtle grain texture using an
+  inline SVG data URI with an SVG feTurbulence filter. Gives the flat white
+  background a slight tactile/paper quality.
+
+  position: fixed + inset 0 → always covers the full viewport, never scrolls
+  z-index: 999              → sits above all content visually, but…
+  pointer-events: none      → …never captures any clicks, taps, or hover events
+  opacity: 0.022            → barely visible — raise toward 0.05 if you want more texture
+*/
+.noise {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: var(--noise-opacity);
+  transition: opacity 0.35s ease;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px; /* Tile size — smaller = finer grain */
+}
+
+/* ────────────────────────────────────────────────
+   4. NAV
+   ──────────────────────────────────────────────── */
+/*
+  position: fixed → stays at top of viewport as user scrolls
+  backdrop-filter → frosted glass effect (blurs content beneath the nav)
+    -webkit- prefix required for Safari (all versions) and Chrome < 76
+  background-color with opacity → semi-transparent so backdrop-filter is visible
+  z-index: 100 → above all page content but below the noise overlay (z:999)
+*/
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-h);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 0 2.5rem;
+  z-index: 100;
+  background-color: var(--nav-bg);
+  /* Safari / Chrome */
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  /* Standard */
+          backdrop-filter: blur(16px) saturate(180%);
+}
+
+/* Gradient bottom border: fades in from the sides, peaks at center */
+nav::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gray-300) 20%,
+    var(--gray-700) 50%,
+    var(--gray-300) 80%,
+    transparent 100%
+  );
+}
+
+.nav-logo {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+.logo-bracket { color: var(--gray-400); }
+
+.nav-links {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 2rem;
+}
+
+.nav-links a {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-decoration: none;
+  -webkit-transition: color 0.2s ease;
+          transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-links a:hover,
+.nav-links a.active { color: var(--text-primary); }
+
+.nav-cta {
+  background-color: var(--gray-900) !important;
+  color: var(--white) !important;
+  padding: 7px 18px;
+  border-radius: 100px;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  /* Gradient border ring using background-clip */
+  border: 1px solid transparent !important;
+  background-image:
+    linear-gradient(var(--gray-900), var(--gray-900)),
+    linear-gradient(135deg, var(--gray-400) 0%, var(--white) 50%, var(--gray-400) 100%) !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+  -webkit-transition: background-color 0.2s ease, -webkit-transform 0.15s ease, -webkit-box-shadow 0.2s ease !important;
+          transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease !important;
+}
+
+/*
+  DARK MODE FIX — Level 4.2
+  This pill was hardcoded to var(--gray-900) (#18181b), which is the
+  exact same value dark mode uses for --surface / the nav backdrop —
+  so the "filled pill" button was nearly blending into its surroundings.
+  Inverted to a light pill in dark mode instead.
+*/
+[data-theme="dark"] .nav-cta {
+  background-color: var(--gray-100) !important;
+  color: var(--gray-900) !important;
+  background-image:
+    linear-gradient(var(--gray-100), var(--gray-100)),
+    linear-gradient(135deg, var(--gray-600) 0%, var(--white) 50%, var(--gray-600) 100%) !important;
+}
+
+.nav-cta:hover {
+  -webkit-transform: translateY(-1px) !important;
+      -ms-transform: translateY(-1px) !important;
+          transform: translateY(-1px) !important;
+  background-image:
+    linear-gradient(var(--gray-700), var(--gray-700)),
+    linear-gradient(135deg, var(--white) 0%, var(--gray-400) 50%, var(--white) 100%) !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+  -webkit-box-shadow: 0 2px 12px rgba(0,0,0,0.2) !important;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.2) !important;
+}
+
+/*
+  THEME TOGGLE — Level 3 addition
+  Circular icon button that sits between the nav links and hamburger.
+  Both sun and moon SVGs live in the DOM at all times; only one is
+  shown at a time based on [data-theme] on <html> — cheaper and more
+  reliable than swapping innerHTML on every click.
+*/
+.theme-toggle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-primary);
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  -webkit-transition: background-color 0.2s ease, border-color 0.2s ease, -webkit-transform 0.2s ease;
+          transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--surface-2);
+  -webkit-transform: rotate(-12deg);
+      -ms-transform: rotate(-12deg);
+          transform: rotate(-12deg);
+}
+
+/* Light mode (default): show sun (means "switch to dark"), hide moon */
+.theme-toggle .icon-moon { display: none; }
+
+/* Dark mode: show moon (means "switch to light"), hide sun */
+[data-theme="dark"] .theme-toggle .icon-sun  { display: none; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+
+/* Hamburger — hidden on desktop */
+.hamburger {
+  display: none;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 6px 4px;
+  cursor: pointer;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  -webkit-transform-origin: center;
+      -ms-transform-origin: center;
+          transform-origin: center;
+  -webkit-transition: -webkit-transform 0.28s ease, opacity 0.28s ease;
+          transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+/* ────────────────────────────────────────────────
+   SECTION BASE
+   ──────────────────────────────────────────────── */
+main { padding-top: var(--nav-h); }
+
+section {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  /* clamp: min 4rem, fluid, max 6.5rem */
+  padding: clamp(3.5rem, 8vw, 6.5rem) clamp(1.25rem, 5vw, 2.5rem);
+}
+
+/* Section heading row */
+.section-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-400);
+  letter-spacing: 0.1em;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+.section-header h2 {
+  font-family: var(--font-display);
+  /* clamp with px fallback for older Safari */
+  font-size: 2rem;
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  line-height: 1.15;
+}
+
+/* ────────────────────────────────────────────────
+   6. HERO
+   ──────────────────────────────────────────────── */
+/*
+  min-height: 100vh → fills the full viewport on first load
+  The second min-height with env(safe-area-inset-top) shrinks it slightly
+  on iPhones with a notch/dynamic island, so the hero doesn't overflow
+  behind the status bar. env() is a CSS variable set by the OS/browser.
+  The fallback 0px means non-notch devices are unaffected.
+*/
+#hero {
+  position: relative;
+  min-height: 100vh;
+  /* Safe-area inset for iPhone notch / dynamic island */
+  min-height: calc(100vh - env(safe-area-inset-top, 0px));
+  padding-top: calc(var(--nav-h) + clamp(3rem, 7vw, 5rem));
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  padding-left: clamp(1.25rem, 5vw, 2.5rem);
+  padding-right: clamp(1.25rem, 5vw, 2.5rem);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  overflow: hidden;
+}
+
+/* Large ghost text background */
+.hero-bg-text {
+  position: absolute;
+  top: 50%;
+  right: -1rem;
+  -webkit-transform: translateY(-58%);
+      -ms-transform: translateY(-58%);
+          transform: translateY(-58%);
+  font-family: var(--font-display);
+  font-size: 20rem;
+  font-size: clamp(8rem, 24vw, 22rem);
+  font-weight: 800;
+  color: transparent;
+  /*
+    -webkit-text-stroke: draws an outline on text instead of a fill.
+    Standard text-stroke is not universally supported — -webkit- prefix
+    covers Chrome, Safari, Edge (Chromium), and modern Android.
+    Firefox supports it without prefix from v101+.
+    The low opacity (0.055) keeps it subtle against the white background.
+  */
+  -webkit-text-stroke: 1.5px rgba(0, 0, 0, 0.055);
+          text-stroke: 1.5px rgba(0, 0, 0, 0.055);
+  letter-spacing: -0.06em;
+  line-height: 1;
+  pointer-events: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  z-index: 0;
+  white-space: nowrap;
+}
+
+/* Two-column hero content */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr auto;
+  grid-template-columns: 1fr auto;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: end;
+  gap: 2.5rem;
+}
+
+/* Availability badge */
+.hero-badge {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-column: 1 / -1;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-600);
+  background-color: var(--gray-100);
+  /* Gradient border via ::before pseudo-element technique:
+     The parent is the gradient "frame"; the ::before is the white fill inside.
+     border: none here because the gradient IS the border. */
+  border: none;
+  padding: 6px 15px; /* 1px extra to account for gradient frame */
+  border-radius: 100px;
+  width: -webkit-fit-content;
+  width:    -moz-fit-content;
+  width:         fit-content;
+  margin-bottom: 0.5rem;
+  position: relative;
+  /* Gradient border wrapper */
+  background-image: linear-gradient(var(--gray-100), var(--gray-100)),
+                    linear-gradient(135deg, var(--gray-900) 0%, var(--gray-400) 50%, var(--gray-900) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border: 1px solid transparent;
+  -webkit-animation: badgeBorderSpin 4s linear infinite;
+          animation: badgeBorderSpin 4s linear infinite;
+  background-size: 100% 100%, 200% 200%;
+}
+
+@-webkit-keyframes badgeBorderSpin {
+  0%   { background-position: 0% 0%, 0% 0%; }
+  100% { background-position: 0% 0%, 200% 200%; }
+}
+@keyframes badgeBorderSpin {
+  0%   { background-position: 0% 0%, 0% 0%; }
+  100% { background-position: 0% 0%, 200% 200%; }
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--gray-700);
+  -webkit-animation: pulse 2.2s ease-in-out infinite;
+          animation: pulse 2.2s ease-in-out infinite;
+}
+
+@-webkit-keyframes pulse {
+  0%, 100% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+  50%       { opacity: 0.4; -webkit-transform: scale(0.75); transform: scale(0.75); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}
+
+/* Name */
+.hero-name {
+  font-family: var(--font-display);
+  font-size: 8rem;
+  font-size: clamp(3.5rem, 10.5vw, 9rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  color: var(--text-primary);
+}
+
+.hero-name em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gray-400);
+}
+
+/* Right panel */
+.hero-right {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 1.25rem;
+  width: 300px;
+  max-width: 100%;
+  padding-bottom: 0.5rem;
+}
+
+.hero-role {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--gray-700);
+  padding-top: 0.75rem;
+  /* Gradient top rule under role title */
+  border-top: none;
+  background-image: linear-gradient(90deg, var(--gray-700) 0%, var(--gray-300) 60%, transparent 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: top;
+}
+
+.hero-desc {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.75;
+}
+
+.hero-actions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 12px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+/* Stats row */
+.hero-footer {
+  position: relative;
+  z-index: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding-top: 2.5rem;
+  /* Gradient top divider for stats row */
+  border-top: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gray-300) 20%,
+    var(--gray-500) 50%,
+    var(--gray-300) 80%,
+    transparent 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: top;
+  margin-top: 2rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.hero-stat {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+.scroll-hint {
+  margin-left: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+}
+
+.scroll-line {
+  display: block;
+  width: 32px;
+  height: 1px;
+  background-color: var(--gray-300);
+  -webkit-animation: scrollAnim 2s ease-in-out infinite;
+          animation: scrollAnim 2s ease-in-out infinite;
+}
+
+@-webkit-keyframes scrollAnim {
+  0%, 100% { width: 14px; opacity: 0.35; }
+  50%       { width: 32px; opacity: 1; }
+}
+@keyframes scrollAnim {
+  0%, 100% { width: 14px; opacity: 0.35; }
+  50%       { width: 32px; opacity: 1; }
+}
+
+/* ────────────────────────────────────────────────
+   7. BUTTONS
+   ──────────────────────────────────────────────── */
+/*
+  -webkit-tap-highlight-color: transparent
+  On mobile (iOS Safari, Android Chrome), tapping a link/button shows a
+  gray/blue flash by default. Setting this to transparent removes that
+  flash so the button's own :active state handles the feedback instead.
+*/
+.btn-primary {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+  background-color: var(--gray-900);
+  color: var(--white);
+  padding: 11px 22px;
+  border-radius: 100px;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  -webkit-transition: background-color 0.2s ease, -webkit-transform 0.15s ease;
+          transition: background-color 0.2s ease, transform 0.15s ease;
+  /* Touch tap highlight */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/*
+  DARK MODE FIX — Level 4.2
+  Same issue as .nav-cta: hardcoded var(--gray-900) matches --bg /
+  --surface almost exactly once dark mode flips, so this CTA button
+  barely registered against the page behind it. Inverted to a light
+  pill so it actually reads as "the button to press" in dark mode too.
+*/
+[data-theme="dark"] .btn-primary {
+  background-color: var(--gray-100);
+  color: var(--gray-900);
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background-color: var(--gray-300);
+}
+
+.btn-primary:hover {
+  background-color: var(--gray-700);
+  -webkit-transform: translateY(-1px);
+      -ms-transform: translateY(-1px);
+          transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
+}
+
+.btn-ghost {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  text-decoration: none;
+  border: none;
+  background: none;
+  padding: 11px 4px;
+  -webkit-transition: color 0.2s ease;
+          transition: color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-ghost:hover { color: var(--text-primary); }
+
+/* ────────────────────────────────────────────────
+   LEVEL 5 — ACHIEVEMENTS
+   ──────────────────────────────────────────────── */
+.achievements-strip {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 12px;
+}
+
+.achievement-badge {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 200px;
+          flex: 1 1 200px;
+  max-width: 260px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.25rem;
+  /* Initial "locked" state — pops in via .unlocked once scrolled into
+     view (see initAchievementsReveal in main.js). A small scale+fade,
+     distinct from the plain fade+slide used elsewhere on the page, so
+     these specifically read as "unlocking" rather than just appearing. */
+  opacity: 0;
+  -webkit-transform: scale(0.85) translateY(8px);
+      -ms-transform: scale(0.85) translateY(8px);
+          transform: scale(0.85) translateY(8px);
+  -webkit-transition: opacity 0.45s ease, -webkit-transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.achievement-badge.unlocked {
+  opacity: 1;
+  -webkit-transform: scale(1) translateY(0);
+      -ms-transform: scale(1) translateY(0);
+          transform: scale(1) translateY(0);
+}
+
+/* Staggered "unlock" order, left to right */
+.achievements-strip .achievement-badge:nth-child(1) { transition-delay: 0s; }
+.achievements-strip .achievement-badge:nth-child(2) { transition-delay: 0.08s; }
+.achievements-strip .achievement-badge:nth-child(3) { transition-delay: 0.16s; }
+.achievements-strip .achievement-badge:nth-child(4) { transition-delay: 0.24s; }
+.achievements-strip .achievement-badge:nth-child(5) { transition-delay: 0.32s; }
+
+.achievement-icon {
+  font-size: 28px;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.achievement-title {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.achievement-desc {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* MULTI-PAGE ADDITION: the CLI Tool achievement now links out to the
+   Projects page — needs a visible underline since `a { color: inherit }`
+   in the reset otherwise makes it indistinguishable from plain text. */
+.achievement-desc a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ────────────────────────────────────────────────
+   LEVEL 5 — CERTIFICATIONS
+   ──────────────────────────────────────────────── */
+/*
+  Mobile-first: single column by default (cert-card is a full-width
+  block), explicitly promoted to 2 columns at the tablet+ breakpoint
+  further down. Not relying on auto-fit/minmax here — with only ever
+  2-3 certs, auto-fit can leave one card oddly stretched full-width
+  next to nothing; an explicit breakpoint keeps the grid intentional.
+*/
+.certifications-grid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 12px;
+}
+
+.cert-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  gap: 14px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.1rem 1.25rem;
+}
+
+.cert-illustration {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  color: var(--text-primary);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.cert-info {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  min-width: 0; /* lets long cert titles ellipsis/wrap instead of overflowing the flex row */
+}
+
+.cert-title {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.cert-issuer {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.cert-date {
+  font-family: var(--font-mono);
+  color: var(--text-faint);
+}
+
+.cert-link {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  -webkit-transition: color 0.2s ease, border-color 0.2s ease;
+          transition: color 0.2s ease, border-color 0.2s ease;
+  /* On mobile, a card is already a single tappable column, so let the
+     link drop below the title/issuer rather than squeezing into the
+     same row (prevented via flex-wrap on .cert-card at the mobile
+     breakpoint further down). */
+}
+
+.cert-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+/* Tablet and up: promote to a real 2-column grid */
+@media screen and (min-width: 640px) {
+  .certifications-grid {
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+}
+
+/* ────────────────────────────────────────────────
+   8. SKILLS
+   ──────────────────────────────────────────────── */
+/*
+  The grid uses gap: 1px with background-color: var(--border) on the wrapper
+  and background-color: white on each cell. This creates the appearance of
+  1px borders between cards without actual border properties — avoids the
+  "double border" issue you'd get if each card had its own border.
+  overflow: hidden on the wrapper clips the background-color to the border-radius.
+*/
+/* Gradient section divider — fades from transparent through gray to transparent */
+#skills {
+  border-top: none;
+  position: relative;
+}
+#skills::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gray-300) 15%,
+    var(--gray-600) 50%,
+    var(--gray-300) 85%,
+    transparent 100%
+  );
+  margin-bottom: 0; /* section padding handles spacing */
+}
+
+.skills-grid {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1px 1fr 1px 1fr 1px 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1px;
+  /* Inner dividers: gray background bleeds through 1px gaps between cards */
+  background-color: var(--gray-200);
+  /* Gradient border via background-clip technique */
+  border: 1px solid transparent;
+  background-image:
+    linear-gradient(var(--gray-200), var(--gray-200)),
+    linear-gradient(135deg, var(--gray-900) 0%, var(--gray-400) 40%, var(--gray-700) 70%, var(--gray-900) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.skill-card {
+  background-color: var(--surface);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  position: relative;
+  -webkit-transition: background-color 0.2s ease, -webkit-transform 0.25s ease;
+          transition: background-color 0.2s ease, transform 0.25s ease;
+}
+
+.skill-card:hover {
+  background-color: var(--surface-2);
+  -webkit-transform: translateY(-4px);
+      -ms-transform: translateY(-4px);
+          transform: translateY(-4px);
+  z-index: 2; /* lifts above neighboring cards so the shadow isn't clipped by siblings */
+  -webkit-box-shadow: 0 10px 28px rgba(0,0,0,0.10);
+          box-shadow: 0 10px 28px rgba(0,0,0,0.10);
+}
+
+/* First card — inverted */
+.skill-card--accent {
+  background-color: var(--gray-900);
+}
+.skill-card--accent:hover {
+  background-color: var(--gray-800);
+  -webkit-box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+          box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+}
+
+/* Numbered index badge — top-right corner of each card, echoes the
+   project cards' "01/02/03" numbering so the whole site reads as one
+   consistent design language rather than separate templates stitched together. */
+.skill-index {
+  position: absolute;
+  top: clamp(1.25rem, 3vw, 2rem);
+  right: clamp(1.25rem, 3vw, 2rem);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-400);
+  letter-spacing: 0.06em;
+}
+
+.skill-card--accent .skill-index { color: var(--gray-600); }
+
+.skill-category {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin-bottom: 1.1rem;
+}
+
+.skill-card--accent .skill-category { color: var(--white); }
+
+/* Per-skill row — Level 4.1 refinement. Replaces the old single
+   combined icon-row image + caption line with an actual list: one row
+   per skill, each with its own icon, name, and proficiency bar. More
+   detailed and more honest than a flat logo strip (you can actually
+   see which skills you rate higher). */
+.skill-rows {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 10px;
+}
+
+.skill-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 10px;
+}
+
+.skill-row-icon {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  -webkit-transition: -webkit-transform 0.25s ease;
+          transition: transform 0.25s ease;
+}
+
+/* Whole card hover gently lifts each icon — same "the card is one
+   hoverable unit" idea the old rotating icon had. */
+.skill-card:hover .skill-row-icon {
+  -webkit-transform: translateY(-1px) scale(1.08);
+      -ms-transform: translateY(-1px) scale(1.08);
+          transform: translateY(-1px) scale(1.08);
+}
+
+.skill-row-name {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-mid);
+}
+
+.skill-card--accent .skill-row-name { color: var(--gray-300); }
+
+/* 5-segment proficiency bar. Filled segments are set directly in the
+   HTML (see the .prof-seg.filled spans) rather than computed from a
+   number via JS/CSS — keeps "how good am I at X" a plain, editable
+   fact in the markup instead of logic to reverse-engineer. */
+.skill-proficiency {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 3px;
+}
+
+.prof-seg {
+  width: 12px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: var(--border);
+}
+
+.prof-seg.filled {
+  background-color: var(--gray-900);
+}
+
+.skill-card--accent .prof-seg {
+  background-color: rgba(255,255,255,0.14);
+}
+
+.skill-card--accent .prof-seg.filled {
+  background-color: var(--white);
+}
+
+/*
+  DARK MODE FIX — Level 4.2
+  .prof-seg.filled was hardcoded to var(--gray-900) (near-black),
+  which never flips with the theme. On the accent card that's fine —
+  it's a permanently dark card, so a dark segment was already wrong
+  and gets overridden right above. But on the other three cards
+  (Backend/Database/Tools), the card's own background also switches to
+  a dark surface in dark mode via var(--surface) — so a near-black
+  "filled" segment on a near-black card background just disappears.
+  .prof-seg itself (unfilled) already uses var(--border), a semantic
+  alias that flips correctly on its own — only the filled state needed
+  an explicit override here.
+*/
+[data-theme="dark"] .skill-card:not(.skill-card--accent) .prof-seg.filled {
+  background-color: var(--gray-100);
+}
+
+.skill-proficiency-value {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-faint);
+  margin-left: 6px;
+}
+
+.skill-card--accent .skill-proficiency-value { color: var(--gray-500); }
+
+/* Legend shown once above the whole grid, explaining what the bars
+   mean — the numeric "N/5" labels next to each skill make individual
+   rows unambiguous, but a first-time visitor still needs this to know
+   what the bars are measuring at all. */
+.skills-legend {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.skills-legend-example {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 3px;
+}
+
+.skills-legend-example .prof-seg { width: 12px; height: 4px; border-radius: 2px; }
+
+/* Staggered entrance — each card gets a slightly later delay than the
+   one before it, so the whole row cascades in left-to-right instead
+   of popping in all at once as a single flat block. */
+.skills-grid .skill-card:nth-child(1) { transition-delay: 0s; }
+.skills-grid .skill-card:nth-child(2) { transition-delay: 0.08s; }
+.skills-grid .skill-card:nth-child(3) { transition-delay: 0.16s; }
+.skills-grid .skill-card:nth-child(4) { transition-delay: 0.24s; }
+
+/* ────────────────────────────────────────────────
+   9. EXPERIENCE
+   ──────────────────────────────────────────────── */
+/*
+  The vertical timeline line is created with .timeline::before — a pseudo-element
+  positioned absolutely on the left edge of the container.
+  Each .exp-dot is positioned absolutely too, aligned to the line via translateX.
+  No extra HTML elements needed — pure CSS.
+*/
+/* Gradient section divider — fades from transparent through gray to transparent */
+#experience {
+  border-top: none;
+  position: relative;
+}
+#experience::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gray-300) 15%,
+    var(--gray-600) 50%,
+    var(--gray-300) 85%,
+    transparent 100%
+  );
+  margin-bottom: 0; /* section padding handles spacing */
+}
+
+.timeline {
+  position: relative;
+  padding-left: 1.75rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  /* Gradient timeline line: fades out at bottom */
+  background: linear-gradient(
+    to bottom,
+    var(--gray-700) 0%,
+    var(--gray-400) 40%,
+    var(--gray-200) 80%,
+    transparent 100%
+  );
+}
+
+.exp-item {
+  position: relative;
+  padding: 0.6rem 1rem 0.6rem 0;
+  margin: -0.6rem -1rem -0.6rem 0;
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
+  border-radius: var(--r-lg);
+  -webkit-transition: background-color 0.25s ease, -webkit-transform 0.25s ease;
+          transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.exp-item:last-child { padding-bottom: 0; }
+
+/* Hovering a whole entry nudges it right and tints the background —
+   makes each entry feel like a distinct, interactive unit rather than
+   plain static rows of text. */
+.exp-item:hover {
+  background-color: var(--surface-2);
+  -webkit-transform: translateX(6px);
+      -ms-transform: translateX(6px);
+          transform: translateX(6px);
+}
+
+/* Numbered badge — replaces the old plain 9px dot. Bigger, holds an
+   actual index number, and sits ON the timeline (half-outside the card
+   to the left), echoing the same "01/02/03" numbering used on the
+   project cards and skill cards for a consistent design language. */
+.exp-badge {
+  position: absolute;
+  left: -2.6rem;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  background-color: var(--gray-900);
+  color: var(--white);
+  border: 3px solid var(--bg);
+  outline: 1.5px solid var(--gray-300);
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  -webkit-transition: -webkit-transform 0.25s ease;
+          transition: transform 0.25s ease;
+}
+
+/*
+  DARK MODE FIX — Level 4.2
+  Badge fill was hardcoded to var(--gray-900), nearly identical to
+  --bg (page background) in dark mode — the numbered circle on the
+  timeline was almost disappearing into the page behind it.
+*/
+[data-theme="dark"] .exp-badge {
+  background-color: var(--gray-100);
+  color: var(--gray-900);
+}
+
+.exp-item:hover .exp-badge {
+  -webkit-transform: scale(1.12);
+      -ms-transform: scale(1.12);
+          transform: scale(1.12);
+}
+
+/* Current-role highlight — a soft pulsing ring around the badge so
+   the most recent entry reads as "active" at a glance, not just
+   another line in the list. */
+.exp-item--current .exp-badge {
+  -webkit-box-shadow: 0 0 0 0 rgba(24,24,27,0.4);
+          box-shadow: 0 0 0 0 rgba(24,24,27,0.4);
+  -webkit-animation: expPulse 2.4s ease-out infinite;
+          animation: expPulse 2.4s ease-out infinite;
+}
+
+[data-theme="dark"] .exp-item--current .exp-badge {
+  -webkit-box-shadow: 0 0 0 0 rgba(250,250,250,0.4);
+          box-shadow: 0 0 0 0 rgba(250,250,250,0.4);
+}
+
+@-webkit-keyframes expPulse {
+  0%   { -webkit-box-shadow: 0 0 0 0 rgba(24,24,27,0.35); }
+  70%  { -webkit-box-shadow: 0 0 0 8px rgba(24,24,27,0); }
+  100% { -webkit-box-shadow: 0 0 0 0 rgba(24,24,27,0); }
+}
+@keyframes expPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(24,24,27,0.35); }
+  70%  { box-shadow: 0 0 0 8px rgba(24,24,27,0); }
+  100% { box-shadow: 0 0 0 0 rgba(24,24,27,0); }
+}
+
+/* Small "Current" pill next to the role title on the active entry */
+.exp-current-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background-color: var(--gray-900);
+  color: var(--white);
+  padding: 3px 10px;
+  border-radius: 100px;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+[data-theme="dark"] .exp-current-tag {
+  background-color: var(--gray-100);
+  color: var(--gray-900);
+}
+
+
+/* Staggered entrance, same cascading idea as the skills cards */
+.timeline .exp-item:nth-child(1) { transition: opacity 0.65s ease, transform 0.65s ease; }
+.timeline .exp-item.fade-in:nth-child(1) { transition-delay: 0s; }
+.timeline .exp-item.fade-in:nth-child(2) { transition-delay: 0.1s; }
+.timeline .exp-item.fade-in:nth-child(3) { transition-delay: 0.2s; }
+
+.exp-meta {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 4px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.exp-role {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.3;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+}
+
+.exp-period {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  background-color: var(--gray-100);
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+}
+
+.exp-company {
+  font-size: 13px;
+  color: var(--gray-500);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.exp-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+.exp-tags {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 1rem;
+}
+
+.tag {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+  padding: 3px 10px;
+  border-radius: 100px;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+/*
+  KEY ACHIEVEMENTS TOGGLE — Level 4.1 addition
+  Same 0fr→1fr collapse trick as the case study accordion (see .cs-step
+  in the modal styles) — a collapsed panel has zero usable height, an
+  open one gets its natural content height, and the transition between
+  them is smooth without any JS measuring scrollHeight.
+*/
+.exp-toggle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 6px;
+  margin-top: 0.9rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.exp-toggle:hover { color: var(--text-primary); }
+
+.exp-toggle-chevron {
+  -webkit-transition: -webkit-transform 0.25s ease;
+          transition: transform 0.25s ease;
+}
+
+.exp-toggle[aria-expanded="true"] .exp-toggle-chevron {
+  -webkit-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+.exp-achievements-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  -webkit-transition: grid-template-rows 0.3s ease;
+          transition: grid-template-rows 0.3s ease;
+}
+
+.exp-item.achievements-open .exp-achievements-wrap {
+  grid-template-rows: 1fr;
+}
+
+.exp-achievements {
+  overflow: hidden;
+  min-height: 0;
+  padding-left: 1.1rem;
+  padding-top: 0.75rem;
+}
+
+.exp-achievements li {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-mid);
+  list-style: disc;
+  margin-bottom: 4px;
+}
+
+/* ────────────────────────────────────────────────
+   10. PROJECTS
+   ──────────────────────────────────────────────── */
+/*
+  auto-fit + minmax(250px, 1fr) → columns auto-add/remove based on available space.
+  Cards are at least 250px wide and stretch to fill the row evenly.
+  On mobile this collapses to 1 column (overridden in the 768px breakpoint).
+*/
+/* Gradient section divider — fades from transparent through gray to transparent */
+#projects {
+  border-top: none;
+  position: relative;
+}
+#projects::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gray-300) 15%,
+    var(--gray-600) 50%,
+    var(--gray-300) 85%,
+    transparent 100%
+  );
+  margin-bottom: 0; /* section padding handles spacing */
+}
+
+/*
+  PROJECT FILTER PILLS — Level 3 addition
+  Row of toggle buttons above the project grid. JS (filterProjects in
+  main.js) reads each .project-card's data-category and shows/hides
+  cards that don't match the active pill's data-filter value.
+*/
+.project-filters {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.75rem;
+}
+
+.filter-pill {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  background-color: transparent;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 7px 16px;
+  -webkit-transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+          transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.filter-pill:hover {
+  border-color: var(--gray-500);
+  color: var(--text-primary);
+}
+
+.filter-pill.active {
+  /* Inverted relative to the page: light mode = dark pill, dark mode = light pill.
+     Using --text-primary/--bg (not raw grays) is what makes that inversion automatic. */
+  background-color: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--bg);
+}
+
+/* Cards hidden by the active filter — fade + collapse rather than
+   an abrupt display:none jump, so re-filtering feels smooth */
+.project-card.is-hidden {
+  display: none;
+}
+
+.projects-grid {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 16px 1fr 16px 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.project-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 1rem;
+  -webkit-transition: -webkit-transform 0.2s ease, border-color 0.2s ease;
+          transition: transform 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.project-card {
+  position: relative; /* needed for ::before gradient border */
+}
+
+/* Gradient border on project cards using background-clip technique */
+.project-card:hover {
+  -webkit-transform: translateY(-3px);
+      -ms-transform: translateY(-3px);
+          transform: translateY(-3px);
+  border: 1px solid transparent;
+  background-image:
+    linear-gradient(var(--surface), var(--surface)),
+    linear-gradient(135deg, var(--gray-900) 0%, var(--gray-400) 50%, var(--gray-700) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.project-card--featured {
+  background-color: var(--gray-900);
+  /* Gradient border: dark card needs dark fill in the background-clip layer */
+  border: 1px solid transparent;
+  background-image:
+    linear-gradient(var(--gray-900), var(--gray-900)),
+    linear-gradient(135deg, var(--gray-600) 0%, var(--white) 40%, var(--gray-600) 70%, var(--gray-300) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/*
+  DARK MODE FIX — Level 4.2
+  This card is styled var(--gray-900) specifically so it stands out as
+  "the dark featured card" among lighter siblings. But in dark mode,
+  --surface (the *regular* card background) is ALSO var(--gray-900) —
+  so the featured card and every plain sibling card become the exact
+  same color, and the whole "featured" distinction disappears. Using
+  the true --black here (darker than --surface) restores the contrast.
+*/
+[data-theme="dark"] .project-card--featured {
+  background-color: var(--black);
+}
+
+
+.project-card--featured:hover {
+  -webkit-transform: translateY(-3px);
+      -ms-transform: translateY(-3px);
+          transform: translateY(-3px);
+  background-image:
+    linear-gradient(var(--gray-900), var(--gray-900)),
+    linear-gradient(135deg, var(--white) 0%, var(--gray-400) 40%, var(--white) 70%, var(--gray-500) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+[data-theme="dark"] .project-card--featured:hover {
+  background-image:
+    linear-gradient(var(--black), var(--black)),
+    linear-gradient(135deg, var(--white) 0%, var(--gray-400) 40%, var(--white) 70%, var(--gray-500) 100%);
+}
+
+.project-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.project-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-400);
+  letter-spacing: 0.06em;
+}
+
+.project-card--featured .project-num { color: var(--gray-600); }
+
+.project-links {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1rem;
+}
+
+.project-link {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 5px;
+  -webkit-transition: color 0.2s ease;
+          transition: color 0.2s ease;
+}
+
+.project-link:hover { color: var(--text-primary); }
+.project-card--featured .project-link { color: var(--gray-500); }
+.project-card--featured .project-link:hover { color: var(--white); }
+
+.project-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.project-card--featured .project-title { color: var(--white); }
+
+.project-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.project-card--featured .project-desc { color: var(--gray-500); }
+
+/* ────────────────────────────────────────────────
+   LEVEL 5 — TESTIMONIALS CAROUSEL
+   ──────────────────────────────────────────────── */
+.testimonials-carousel {
+  max-width: 640px;
+}
+
+/* Slides are stacked via absolute positioning so the CSS opacity
+   transition can actually crossfade between them — display:none
+   swapping would skip the transition entirely. min-height keeps the
+   track from collapsing while an inactive (opacity:0) slide still
+   technically occupies the stack. */
+.testimonial-track {
+  position: relative;
+  min-height: 200px;
+}
+
+.testimonial-slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 1.75rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  opacity: 0;
+  pointer-events: none;
+  -webkit-transition: opacity 0.4s ease;
+          transition: opacity 0.4s ease;
+}
+
+.testimonial-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+  position: relative; /* takes back its place in flow once active, so page height is correct */
+}
+
+.testimonial-quote {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--text-mid);
+  margin-bottom: 1.1rem;
+}
+
+.testimonial-author {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 12px;
+}
+
+.testimonial-avatar {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background-color: var(--surface-2);
+  color: var(--text-faint);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.testimonial-author-text {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.testimonial-name {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.testimonial-role {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+
+.testimonials-controls {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.testimonial-nav {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  cursor: pointer;
+  -webkit-transition: background-color 0.2s ease, color 0.2s ease;
+          transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.testimonial-nav:hover {
+  background-color: var(--surface-2);
+  color: var(--text-primary);
+}
+
+.testimonials-dots {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 6px;
+}
+
+.testimonial-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background-color: var(--border);
+  cursor: pointer;
+  -webkit-transition: background-color 0.2s ease, -webkit-transform 0.2s ease;
+          transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.testimonial-dot.active {
+  background-color: var(--text-primary);
+  -webkit-transform: scale(1.3);
+      -ms-transform: scale(1.3);
+          transform: scale(1.3);
+}
+
+/* ────────────────────────────────────────────────
+   11. CONTACT
+   ──────────────────────────────────────────────── */
+/* Gradient section divider — fades from transparent through gray to transparent */
+#contact {
+  border-top: none;
+  position: relative;
+}
+#contact::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gray-300) 15%,
+    var(--gray-600) 50%,
+    var(--gray-300) 85%,
+    transparent 100%
+  );
+  margin-bottom: 0; /* section padding handles spacing */
+}
+
+.contact-inner {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 4rem 1.3fr;
+  grid-template-columns: 1fr 1.3fr;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: start;
+}
+
+.contact-headline {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.contact-headline em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gray-400);
+}
+
+.contact-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.contact-social {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 12px;
+}
+
+.contact-social a {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  text-decoration: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 12px;
+  -webkit-transition: color 0.2s ease;
+          transition: color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.contact-social a:hover { color: var(--text-primary); }
+
+.social-icon {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: var(--surface);
+  color: var(--gray-500);
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  -webkit-transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+          transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.contact-social a:hover .social-icon {
+  /* Gradient border on social icon hover */
+  border: 1px solid transparent;
+  background-image:
+    linear-gradient(var(--surface), var(--surface)),
+    linear-gradient(135deg, var(--gray-900) 0%, var(--gray-500) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  color: var(--text-primary);
+}
+
+/* ── FORM ── */
+.contact-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1rem 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+.form-group input,
+.form-group textarea {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-primary);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 11px 14px;
+  outline: none;
+  -webkit-transition: border-color 0.2s ease, -webkit-box-shadow 0.2s ease, background-color 0.2s ease;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  resize: vertical;
+  /*
+    -webkit-appearance: none → removes iOS Safari's default input styling:
+    rounded corners, inner shadows, and the default blue focus ring.
+    Without this, iOS inputs look native/native-styled, not matching our design.
+    -moz-appearance: none → same for Firefox.
+    appearance: none      → standard (Chrome, Edge, modern Safari).
+  */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100%;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  /* Gradient border on focus using background-clip technique */
+  border: 1px solid transparent;
+  background-image:
+    linear-gradient(var(--surface), var(--surface)),
+    linear-gradient(135deg, var(--gray-900) 0%, var(--gray-500) 50%, var(--gray-900) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  -webkit-box-shadow: 0 0 0 3px rgba(39,39,42,0.08);
+          box-shadow: 0 0 0 3px rgba(39,39,42,0.08);
+}
+
+[data-theme="dark"] .form-group input:focus,
+[data-theme="dark"] .form-group textarea:focus {
+  -webkit-box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
+          box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
+}
+
+.form-group input::-webkit-input-placeholder,
+.form-group textarea::-webkit-input-placeholder { color: var(--text-faint); }
+.form-group input::-moz-placeholder,
+.form-group textarea::-moz-placeholder         { color: var(--text-faint); opacity: 1; }
+.form-group input:-ms-input-placeholder,
+.form-group textarea:-ms-input-placeholder     { color: var(--text-faint); }
+.form-group input::placeholder,
+.form-group textarea::placeholder              { color: var(--text-faint); }
+
+.form-group textarea { min-height: 120px; }
+
+.form-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.submit-btn {
+  background-color: var(--gray-900);
+  color: var(--white);
+  border: none;
+  padding: 12px 26px;
+  border-radius: 100px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+  -webkit-transition: background-color 0.2s ease, -webkit-transform 0.15s ease, opacity 0.2s ease;
+          transition: background-color 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  /*
+    touch-action: manipulation → tells the browser this element only needs
+    tap/pan gestures, not multi-touch zoom. This eliminates the ~300ms tap
+    delay on mobile browsers (a legacy behavior from the double-tap-to-zoom era).
+    Result: the button feels instant to tap on iOS and Android.
+    -ms-touch-action is the IE 11 / Edge Legacy prefix.
+  */
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+}
+
+/*
+  DARK MODE FIX — Level 4.2
+  Same var(--gray-900)-matches-dark-surface issue as the other CTA
+  buttons on this page. Inverted to a light pill in dark mode.
+*/
+[data-theme="dark"] .submit-btn {
+  background-color: var(--gray-100);
+  color: var(--gray-900);
+}
+
+[data-theme="dark"] .submit-btn:hover:not(:disabled) {
+  background-color: var(--gray-300);
+  box-shadow: 0 0 0 2px var(--gray-100), 0 0 0 3px var(--gray-500), 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.submit-btn:hover:not(:disabled) {
+  background-color: var(--gray-700);
+  -webkit-transform: translateY(-1px);
+      -ms-transform: translateY(-1px);
+          transform: translateY(-1px);
+  /* Subtle gradient glow ring on hover */
+  -webkit-box-shadow: 0 0 0 2px var(--gray-900), 0 0 0 3px var(--gray-500), 0 4px 16px rgba(0,0,0,0.18);
+          box-shadow: 0 0 0 2px var(--gray-900), 0 0 0 3px var(--gray-500), 0 4px 16px rgba(0,0,0,0.18);}
+
+.submit-btn:active:not(:disabled) {
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
+}
+
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.form-status {
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  display: none;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+.form-status.success { display: inline-block; background-color: var(--success-bg); color: var(--success); }
+.form-status.error   { display: inline-block; background-color: var(--error-bg);   color: var(--error); }
+
+/* ────────────────────────────────────────────────
+   12. FOOTER
+   ──────────────────────────────────────────────── */
+footer {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 2rem 2.5rem;
+  border-top: 1px solid var(--border-soft);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  gap: 1rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.footer-logo {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.footer-copy,
+.footer-stack {
+  font-size: 12px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+.visitor-counter {
+  height: 20px;
+  width: auto;
+  /* Badge image ships its own colors baked in (see the labelColor/
+     countColor query params on the <img> itself in index.html) —
+     nothing theme-dependent to set here beyond size/alignment. */
+}
+
+/* ────────────────────────────────────────────────
+   CUSTOM CURSOR LABEL — Level 3 addition
+   ──────────────────────────────────────────────── */
+/*
+  A single fixed-position pill that main.js moves to follow the mouse
+  while hovering a .project-card, showing "View project". Wrapped in
+  a pointer:fine media query so touch devices never load this behavior
+  (no mouse to "follow" there, and it would just get in the way).
+*/
+@media (pointer: fine) {
+  .project-card { cursor: none; } /* native cursor hidden — the label replaces it */
+
+  .cursor-label {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 998; /* below .noise (999), above everything else */
+    pointer-events: none; /* never intercepts the click meant for the card underneath */
+    background-color: var(--text-primary);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 8px 16px;
+    border-radius: 100px;
+    white-space: nowrap;
+    opacity: 0;
+    -webkit-transform: translate(-50%, -50%) scale(0.8);
+        -ms-transform: translate(-50%, -50%) scale(0.8);
+            transform: translate(-50%, -50%) scale(0.8);
+    -webkit-transition: opacity 0.18s ease, -webkit-transform 0.18s ease, background-color 0.2s ease, color 0.2s ease;
+            transition: opacity 0.18s ease, transform 0.18s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  /* JS toggles this class on #cursorLabel while the pointer is over a .project-card */
+  .cursor-label.visible {
+    opacity: 1;
+    -webkit-transform: translate(-50%, -50%) scale(1);
+        -ms-transform: translate(-50%, -50%) scale(1);
+            transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* ────────────────────────────────────────────────
+   13. FADE-IN ANIMATION
+   ──────────────────────────────────────────────── */
+/*
+  Elements with .fade-in start hidden (opacity 0, shifted down 22px).
+  When JS adds .visible (via IntersectionObserver in main.js), the CSS
+  transition animates them into view.
+
+  prefers-reduced-motion: reduce
+  Some users have vestibular disorders or motion sensitivity.
+  The OS accessibility setting "Reduce Motion" sets this media query.
+  We respect it by: disabling the fade-in transform/opacity transition,
+  stopping all CSS animations (@keyframes), and disabling smooth scroll.
+  The page still works — it just skips the decorative motion.
+*/
+.fade-in {
+  opacity: 0;
+  -webkit-transform: translateY(22px);
+      -ms-transform: translateY(22px);
+          transform: translateY(22px);
+  -webkit-transition: opacity 0.65s ease, -webkit-transform 0.65s ease;
+          transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    opacity: 1;
+    -webkit-transform: none;
+        -ms-transform: none;
+            transform: none;
+    -webkit-transition: none;
+            transition: none;
+  }
+  * {
+    -webkit-animation-duration: 0.01ms !important;
+            animation-duration: 0.01ms !important;
+    -webkit-animation-iteration-count: 1 !important;
+            animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ────────────────────────────────────────────────
+   14. RESPONSIVE BREAKPOINTS
+   ──────────────────────────────────────────────── */
+/*
+  Breakpoint strategy (desktop-first):
+  ┌─────────────┬──────────────────────────────────────────────┐
+  │  ≥ 1280px   │ Wide desktop — max-width bumps to 1080px     │
+  │  ≥  769px   │ Desktop nav — hamburger hidden, links shown  │
+  │  ≤  900px   │ Tablet — hero + contact go single column     │
+  │  ≤  768px   │ Mobile / landscape phone — hamburger appears │
+  │  ≤  480px   │ Small mobile — skills stack to 1 column      │
+  │  ≤  360px   │ Very small (older Androids) — tighter padding│
+  └─────────────┴──────────────────────────────────────────────┘
+
+  Why 768px for mobile nav (not 720px)?
+  iPhone 13 in landscape = 844px wide. The old 720px threshold caused
+  the hamburger to show on landscape iPhone because of how some browsers
+  report viewport width during orientation change. 768px safely clears
+  all modern phones in landscape orientation.
+*/
+
+/* ── Desktop nav always visible (≥ 769px) ── */
+@media screen and (min-width: 769px) {
+  .hamburger { display: none !important; }
+  .nav-links {
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+    position: static;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    background: none;
+    padding: 0;
+    border: none;
+    opacity: 1;
+    -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+    z-index: auto;
+  }
+}
+
+/* ── Tablet (≤ 900px) ── */
+@media screen and (max-width: 900px) {
+  .hero-content {
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .hero-right {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .contact-inner {
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .skills-grid {
+    -ms-grid-columns: 1fr 1px 1fr;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Large mobile / landscape phones (≤ 768px) ── */
+@media screen and (max-width: 768px) {
+  nav { padding: 0 1.25rem; }
+
+  /* Always hide nav links on mobile — shown via .open class */
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    background-color: var(--nav-bg);
+    -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+    padding: 1.5rem 2rem;
+    gap: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+    opacity: 0;
+    -webkit-transition: opacity 0.22s ease;
+            transition: opacity 0.22s ease;
+  }
+
+  .nav-links.open {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    opacity: 1;
+  }
+
+  .nav-links a { font-size: 1rem; color: var(--text-primary); }
+
+  /* Show hamburger only on mobile widths */
+  .hamburger { display: -webkit-box; display: -ms-flexbox; display: flex; }
+
+  .projects-grid {
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-bg-text {
+    font-size: 6.5rem;
+    top: 25%;
+    right: -0.5rem;
+  }
+
+  .hero-footer { gap: 1.5rem; }
+
+  .form-row {
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+  }
+
+  footer {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    gap: 6px;
+    text-align: center;
+    padding: 1.5rem;
+  }
+}
+
+/* ── Small mobile (≤ 480px) ── */
+@media screen and (max-width: 480px) {
+  :root { --nav-h: 56px; }
+
+  .skills-grid {
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-footer .scroll-hint { display: none; }
+
+  .hero-badge { font-size: 10px; }
+
+  .stat-num { font-size: 1.2rem; }
+
+  /* Cert card: let the "View credential" link drop to its own line
+     below title/issuer instead of squeezing into the same row as the
+     icon on a narrow screen. */
+  .cert-card {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+  }
+  .cert-link {
+    margin-left: calc(38px + 14px); /* aligns under cert-info, past the icon */
+  }
+
+  /* Achievement badges: full-width single column rather than the
+     2-up wrap flex-basis:200px produces on a narrow phone. */
+  .achievement-badge {
+    -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+    max-width: none;
+  }
+}
+
+/* ── Very small (≤ 360px) ── */
+@media screen and (max-width: 360px) {
+  section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .hero-actions { gap: 8px; }
+
+  .btn-primary, .btn-ghost { font-size: 13px; }
+}
+
+/* ── Wide screens (≥ 1280px) ── */
+@media screen and (min-width: 1280px) {
+  :root { --max-w: 1080px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LEVEL 4 ADDITIONS
+   ─────────────────────────────────────────────────────────────────
+   Table of contents for this block:
+     A. Command palette trigger + overlay
+     B. Shared modal (used for case studies)
+     C. Case study button (sits inside .project-card)
+     D. GitHub Activity card
+     E. Hero mouse-parallax support
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── A. Command palette trigger button (nav) ── */
+.cmdk-trigger {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  -webkit-transition: border-color 0.2s ease, color 0.2s ease;
+          transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.cmdk-trigger:hover {
+  border-color: var(--gray-500);
+  color: var(--text-primary);
+}
+
+.cmdk-trigger-kbd {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+
+/* Hide the "Ctrl K" label on narrow screens — icon-only button there,
+   the palette is still reachable via the button tap or the shortcut */
+@media screen and (max-width: 560px) {
+  .cmdk-trigger-kbd { display: none; }
+  .cmdk-trigger { padding: 0; width: 34px; justify-content: center; }
+}
+
+/* ── A. Command palette overlay ── */
+.cmdk-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background-color: rgba(9, 9, 11, 0.55);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 12vh 1.25rem 0;
+}
+
+/* Higher specificity than `.cmdk-overlay { display: flex }` above, so this
+   correctly wins and actually hides the overlay when JS sets [hidden].
+   Without this, the plain hidden attribute gets silently overridden by
+   the display:flex rule and the overlay never visually disappears. */
+.cmdk-overlay[hidden] {
+  display: none;
+}
+
+.cmdk-panel {
+  width: 100%;
+  max-width: 560px;
+  max-height: 60vh;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.cmdk-input-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+.cmdk-input {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14.5px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+.cmdk-input::-webkit-input-placeholder { color: var(--text-faint); }
+.cmdk-input::placeholder { color: var(--text-faint); }
+
+.cmdk-esc {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-faint);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+
+.cmdk-list {
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.cmdk-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: var(--r);
+  font-size: 13.5px;
+  color: var(--text-mid);
+}
+
+.cmdk-item-hint {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-faint);
+}
+
+/* JS toggles this on the currently keyboard-highlighted row */
+.cmdk-item.active {
+  background-color: var(--surface-2);
+  color: var(--text-primary);
+}
+
+.cmdk-empty {
+  padding: 20px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+/* ── B. Shared modal (case study) ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background-color: rgba(9, 9, 11, 0.6);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 1.25rem;
+}
+
+/* Same fix as .cmdk-overlay[hidden] above — needed so JS's [hidden]
+   attribute actually wins over the display:flex rule. */
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-panel {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  max-height: 82vh;
+  overflow-y: auto;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: clamp(1.75rem, 4vw, 2.75rem);
+  -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-transition: background-color 0.2s ease, color 0.2s ease;
+          transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.modal-close:hover { background-color: var(--surface-2); color: var(--text-primary); }
+
+.modal-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 6px;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+  padding-right: 2rem; /* keeps long titles clear of the close button */
+}
+
+.modal-body h4 {
+  font-family: var(--font-display);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  margin-top: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body h4:first-child { margin-top: 0; }
+
+.modal-body p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--text-mid);
+}
+
+/*
+  CASE STUDY FLOW — Level 4.1 refinement
+  Was a fully-expanded static flow; now an accordion — each step's
+  paragraph stays collapsed until its header is tapped, so the case
+  study invites interaction instead of dumping everything at once.
+  The circle + connecting line are still the visual thread, they just
+  now live inside a clickable <button> header rather than a static row.
+
+  Animation uses the CSS grid-template-rows "0fr → 1fr" trick instead
+  of measuring scrollHeight in JS — a collapsed row has zero usable
+  height, an open one gets exactly the content's natural height, and
+  the transition between them animates smoothly with no JS math.
+  See initCaseStudyModal()'s accordion wiring in main.js.
+*/
+.cs-flow {
+  position: relative;
+}
+
+/* Connecting line running behind the numbered circles. Approximated
+   to the vertical center of the (consistently-sized) header rows —
+   good enough visually without needing JS to measure exact positions. */
+.cs-flow::before {
+  content: '';
+  position: absolute;
+  left: calc(0.5rem + 12px);
+  top: 22px;
+  bottom: 22px;
+  width: 2px;
+  background-color: var(--border);
+}
+
+.cs-step {
+  position: relative;
+}
+
+.cs-step-header {
+  position: relative;
+  z-index: 1; /* sits above the connecting line */
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 12px;
+  padding: 0.9rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--r);
+  text-align: left;
+  cursor: pointer;
+  -webkit-transition: background-color 0.2s ease;
+          transition: background-color 0.2s ease;
+}
+
+.cs-step-header:hover,
+.cs-step-header:focus-visible {
+  background-color: var(--surface-2);
+  outline: none;
+}
+
+.cs-step-num {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  background-color: var(--gray-900);
+  color: var(--white);
+  border: 3px solid var(--surface); /* punches a clean gap in the line behind it */
+}
+
+.cs-step-num svg { display: block; }
+
+/* Distinct shade + icon per step type — same numbered-circle shape,
+   but progressively darker as you move through the flow, so the
+   sequence itself carries a bit of visual weight instead of every
+   step looking identical apart from its label. */
+.cs-step--problem .cs-step-num { background-color: var(--gray-500); }
+.cs-step--process .cs-step-num { background-color: var(--gray-700); }
+
+/* Result step's circle gets a soft ring so the "outcome" step reads as
+   the payoff at a glance, without introducing an off-brand accent color */
+.cs-step--result .cs-step-num {
+  background-color: var(--gray-900);
+  -webkit-box-shadow: 0 0 0 3px var(--border-soft);
+          box-shadow: 0 0 0 3px var(--border-soft);
+}
+
+/*
+  DARK MODE FIX — Level 4.2
+  Most severe version of this bug: .cs-step--result was var(--gray-900),
+  and the modal panel it sits on (.modal-panel) is var(--surface) —
+  which IS var(--gray-900) in dark mode. Same exact color as its own
+  background meant the circle was 100% invisible, not just low-contrast.
+  problem/process were lighter grays so they at least partially showed,
+  but all three get proper dark-mode values here, inverted so they get
+  progressively LIGHTER (instead of darker) through the flow — still
+  reads as "building up to the payoff", just flipped for a dark canvas.
+*/
+[data-theme="dark"] .cs-step--problem .cs-step-num {
+  background-color: var(--gray-600);
+}
+[data-theme="dark"] .cs-step--process .cs-step-num {
+  background-color: var(--gray-400);
+  color: var(--gray-900);
+}
+[data-theme="dark"] .cs-step--result .cs-step-num {
+  background-color: var(--gray-100);
+  color: var(--gray-900);
+}
+
+/* Progress dots — purely visual feedback for how far through the
+   Problem → Process → Result flow the reader has tapped. Updated by
+   updateCaseStudyProgress() in main.js every time a step is toggled. */
+.cs-progress {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1.1rem;
+}
+
+.cs-progress-dot {
+  width: 20px;
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--border);
+  -webkit-transition: background-color 0.25s ease;
+          transition: background-color 0.25s ease;
+}
+
+.cs-progress-dot.seen {
+  background-color: var(--gray-900);
+}
+
+/*
+  DARK MODE FIX — Level 4.2
+  Same exact-match issue as the step circles: .seen was var(--gray-900),
+  identical to the modal panel's --surface in dark mode, so "seen"
+  dots were indistinguishable from "not seen yet" ones.
+*/
+[data-theme="dark"] .cs-progress-dot.seen {
+  background-color: var(--gray-100);
+}
+
+.cs-flow .cs-step-title {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--text-primary);
+}
+
+.cs-step-chevron {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  color: var(--text-faint);
+  -webkit-transition: -webkit-transform 0.25s ease;
+          transition: transform 0.25s ease;
+}
+
+.cs-step.open .cs-step-chevron {
+  -webkit-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+/* The 0fr → 1fr collapse/expand trick */
+.cs-step-panel-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  padding-left: calc(26px + 12px + 0.5rem); /* aligns wrapped text under the title, not the circle */
+  -webkit-transition: grid-template-rows 0.3s ease;
+          transition: grid-template-rows 0.3s ease;
+}
+
+.cs-step.open .cs-step-panel-wrap {
+  grid-template-rows: 1fr;
+}
+
+.cs-step-panel-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.cs-step-panel-inner p {
+  padding: 0 0.5rem 0.9rem 0;
+  margin: 0;
+}
+
+/* ── C. Case study button (inside .project-card) ── */
+.case-study-btn {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 6px;
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-bottom: 1px solid var(--gray-400);
+  -webkit-transition: gap 0.2s ease, border-color 0.2s ease;
+          transition: gap 0.2s ease, border-color 0.2s ease;
+}
+
+.case-study-btn:hover {
+  gap: 10px;
+  border-color: var(--text-primary);
+}
+
+.project-card--featured .case-study-btn { color: var(--white); border-color: var(--gray-500); }
+
+/* ── D. GitHub Activity card ── */
+.github-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.github-loading {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 14px;
+}
+
+/* Same [hidden]-vs-display:flex fix as the overlays above */
+.github-loading[hidden] {
+  display: none;
+}
+
+.gh-skel {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--gray-200) 37%, var(--surface-2) 63%);
+  background-size: 400% 100%;
+  -webkit-animation: ghShimmer 1.4s ease infinite;
+          animation: ghShimmer 1.4s ease infinite;
+  border-radius: 6px;
+}
+
+[data-theme="dark"] .gh-skel {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--gray-700) 37%, var(--surface-2) 63%);
+  background-size: 400% 100%;
+}
+
+.gh-skel--avatar { width: 56px; height: 56px; border-radius: 50%; -ms-flex-negative: 0; flex-shrink: 0; }
+.gh-skel-lines { -webkit-box-flex: 1; -ms-flex: 1; flex: 1; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; gap: 10px; }
+.gh-skel--line { height: 12px; }
+
+@-webkit-keyframes ghShimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+@keyframes ghShimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+.github-profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 14px;
+  margin-bottom: 1.5rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.github-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+.github-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+.github-handle {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.github-follow {
+  margin-left: auto;
+  font-size: 12.5px;
+  padding: 7px 16px;
+}
+
+/* ── Contribution graph ── */
+.github-contrib {
+  margin-bottom: 1.5rem;
+}
+
+.contrib-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.github-contrib-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* Reuses the same visual language as the project .filter-pill row —
+   same interaction pattern, different data being filtered. */
+.contrib-filters {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 6px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.contrib-filter-pill {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background-color: transparent;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 5px 12px;
+  -webkit-transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+          transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.contrib-filter-pill:hover {
+  border-color: var(--gray-500);
+  color: var(--text-primary);
+}
+
+.contrib-filter-pill.active {
+  background-color: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--bg);
+}
+
+.contrib-custom-range {
+  margin-bottom: 0.85rem;
+}
+
+.contrib-range-fields-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  gap: 0.85rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.contrib-range-field {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 4px;
+}
+
+.contrib-range-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+/* Trigger button — tapping opens .contrib-month-popover below */
+.contrib-month-btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-primary);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 7px 12px;
+  min-width: 90px;
+  text-align: left;
+  cursor: pointer;
+  -webkit-transition: border-color 0.2s ease;
+          transition: border-color 0.2s ease;
+}
+
+.contrib-month-btn:hover,
+.contrib-month-btn.active {
+  border-color: var(--gray-500);
+}
+
+.contrib-apply {
+  font-size: 12.5px;
+  padding: 7px 16px;
+}
+
+/* Popover calendar — sits in normal document flow directly below the
+   From/To buttons (not floating/absolutely-positioned), so it always
+   appears in a predictable spot and never needs coordinate math to
+   stay on-screen on a narrow mobile viewport. */
+.contrib-month-popover {
+  margin-top: 0.75rem;
+  padding: 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background-color: var(--surface);
+  max-width: 280px;
+}
+
+.contrib-month-popover-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.contrib-month-popover-year {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.contrib-month-nav {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  cursor: pointer;
+  -webkit-transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+          transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.contrib-month-nav:hover:not(:disabled) {
+  background-color: var(--surface-2);
+  color: var(--text-primary);
+}
+
+.contrib-month-nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.contrib-month-popover-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.contrib-popover-month-btn {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-mid);
+  background-color: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: var(--r);
+  padding: 8px 4px;
+  cursor: pointer;
+  -webkit-transition: background-color 0.2s ease, color 0.2s ease;
+          transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.contrib-popover-month-btn:hover {
+  background-color: var(--border-soft);
+  color: var(--text-primary);
+}
+
+/* Currently-selected month for whichever field (From/To) is active */
+.contrib-popover-month-btn.selected {
+  background-color: var(--text-primary);
+  color: var(--bg);
+}
+
+/* Months outside the data-available window (only ~12 trailing months
+   exist from the API) — shown but not tappable, so the grid always
+   looks like a complete year even when most of it has no data. */
+.contrib-popover-month-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  background-color: var(--surface-2);
+}
+
+.github-contrib-wrap {
+  position: relative;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r);
+  padding: 0.85rem;
+  /* Horizontal scroll on narrow/mobile screens rather than squashing
+     the calendar illegibly small — the grid keeps its real cell size
+     and the visitor can swipe through the weeks. */
+  overflow-x: auto;
+}
+
+.gh-skel--contrib {
+  width: 100%;
+  height: 110px;
+}
+
+/* Once real data has rendered, JS removes the skeleton from the DOM
+   flow (display:none) — no fade needed since the swap is instant. */
+
+/* Month abbreviations row, sits directly above the day grid and shares
+   its exact column widths so labels line up with the week they belong to. */
+.contrib-months {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 11px;
+  gap: 3px;
+  margin-bottom: 4px;
+  min-width: -webkit-max-content;
+  min-width: max-content;
+}
+
+.contrib-month-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+  white-space: nowrap;
+  overflow: visible; /* label text is allowed to bleed rightward over its own empty columns */
+}
+
+/* The day grid itself — 7 rows (Sun-Sat) × however many weeks fit the
+   selected range. grid-auto-flow:column fills top-to-bottom then moves
+   to the next column, which is exactly "one column per week". */
+.contrib-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 11px);
+  grid-auto-columns: 11px;
+  gap: 3px;
+  min-width: -webkit-max-content;
+  min-width: max-content;
+}
+
+.contrib-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  border: none;
+  padding: 0;
+  background-color: var(--gray-100);
+  cursor: pointer;
+  -webkit-transition: -webkit-transform 0.12s ease;
+          transition: transform 0.12s ease;
+}
+
+.contrib-cell:hover,
+.contrib-cell:focus-visible {
+  -webkit-transform: scale(1.35);
+      -ms-transform: scale(1.35);
+          transform: scale(1.35);
+  outline: none;
+}
+
+.contrib-cell--empty {
+  background-color: transparent;
+  cursor: default;
+}
+.contrib-cell--empty:hover { -webkit-transform: none; -ms-transform: none; transform: none; }
+
+/* Activity levels — light mode: darker = more active */
+.contrib-cell.lvl-0 { background-color: var(--gray-100); }
+.contrib-cell.lvl-1 { background-color: var(--gray-300); }
+.contrib-cell.lvl-2 { background-color: var(--gray-500); }
+.contrib-cell.lvl-3 { background-color: var(--gray-700); }
+.contrib-cell.lvl-4 { background-color: var(--gray-900); }
+
+/* Dark mode: inverted intensity mapping so the highest-activity cells
+   stay bright/legible against a dark surface instead of nearly
+   disappearing. This is why the old image-swap-per-theme approach is
+   gone — plain CSS now handles both themes automatically. */
+[data-theme="dark"] .contrib-cell.lvl-0 { background-color: var(--gray-800); }
+[data-theme="dark"] .contrib-cell.lvl-1 { background-color: var(--gray-600); }
+[data-theme="dark"] .contrib-cell.lvl-2 { background-color: var(--gray-400); }
+[data-theme="dark"] .contrib-cell.lvl-3 { background-color: var(--gray-200); }
+[data-theme="dark"] .contrib-cell.lvl-4 { background-color: var(--white); }
+
+.contrib-summary {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  padding-top: 0.6rem;
+}
+
+.github-contrib-fallback {
+  font-size: 12.5px;
+  color: var(--text-faint);
+  padding: 0.5rem 0.1rem 0;
+}
+
+.github-contrib-fallback a {
+  color: var(--text-muted);
+  text-decoration: underline;
+}
+
+.github-stats-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: clamp(1.25rem, 4vw, 2.5rem);
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 1.5rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.github-stat-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3vw, 1.6rem);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.github-stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.github-repos {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 8px;
+}
+
+.github-repo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: var(--r);
+  background-color: var(--surface-2);
+  gap: 10px;
+}
+
+.github-repo-name {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.github-repo-meta {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-muted);
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+.github-error {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: var(--text-muted);
+  font-size: 13.5px;
+}
+
+.github-error p { margin-bottom: 1rem; }
+
+/* ── E. Hero mouse-parallax support ──
+   JS (initHeroParallax in main.js) sets --parallax-x/--parallax-y as
+   inline custom properties on #hero based on cursor position; these
+   rules just define how far each layer is allowed to drift and how
+   smoothly it eases toward the new position. Scoped to pointer:fine
+   so touch scrolling never triggers or fights this. */
+@media (pointer: fine) {
+  .hero-bg-text,
+  .hero-content {
+    -webkit-transition: -webkit-transform 0.25s ease-out;
+            transition: transform 0.25s ease-out;
+  }
+
+  .hero-bg-text {
+    -webkit-transform: translate(calc(var(--parallax-x, 0) * 1.6), calc(var(--parallax-y, 0) * 1.6));
+        -ms-transform: translate(calc(var(--parallax-x, 0) * 1.6), calc(var(--parallax-y, 0) * 1.6));
+            transform: translate(calc(var(--parallax-x, 0) * 1.6), calc(var(--parallax-y, 0) * 1.6));
+  }
+
+  .hero-content {
+    -webkit-transform: translate(var(--parallax-x, 0), var(--parallax-y, 0));
+        -ms-transform: translate(var(--parallax-x, 0), var(--parallax-y, 0));
+            transform: translate(var(--parallax-x, 0), var(--parallax-y, 0));
+  }
+}
+
+/* ── Print (also what "Download Resume" produces via window.print()) ── */
+@media print {
+  /*
+    Hide the ENTIRE live page and show only #resumeDocument. A résumé
+    isn't a screenshot of the marketing site — it's its own document —
+    so rather than stripping chrome off the live page (the old
+    approach), everything gets hidden except the purpose-built résumé
+    template, which populateResumeDocument() in main.js fills in from
+    the page's real content before this ever runs.
+  */
+  body > *:not(#resumeDocument) {
+    display: none !important;
+  }
+
+  #resumeDocument {
+    display: block !important;
+  }
+}
+
+/*
+  RÉSUMÉ DOCUMENT — Harvard format
+  ─────────────────────────────────────────────────────────────────
+  Deliberately its own tiny design system, independent of the rest of
+  this stylesheet: serif type, black text on white, no cards/borders/
+  rounded corners — a résumé being read by a recruiter (or an ATS
+  parser) shouldn't depend on, or inherit, whatever [data-theme] the
+  site happened to be in when it was generated. This is invisible on
+  screen ([hidden] in the HTML) and only ever rendered by the print
+  media query above.
+*/
+/*
+  @page controls the browser's own print margins — without this, most
+  browsers default to ~1in on every side, which eats a surprising
+  amount of usable space on a document this dense. Combined with the
+  tighter type-scale below and populateResumeDocument() now capping
+  content to "2 best bullets per role" / "top 3 certifications"
+  instead of everything, this is what keeps a normal-length résumé on
+  a single page instead of spilling a few lines onto a mostly-blank
+  second page.
+*/
+@page {
+  size: auto;
+  margin: 0.5in 0.5in;
+}
+
+#resumeDocument {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #000;
+  background: #fff;
+  max-width: 7.5in;
+  margin: 0 auto;
+  padding: 0;
+  font-size: 10pt;
+  line-height: 1.3;
+}
+
+.resume-header {
+  text-align: center;
+  margin-bottom: 10pt;
+  padding-bottom: 7pt;
+  border-bottom: 1.5pt solid #000;
+}
+
+.resume-header h1 {
+  font-size: 18pt;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 2pt;
+}
+
+.resume-role {
+  font-size: 10pt;
+  font-style: italic;
+  margin-bottom: 3pt;
+}
+
+.resume-contact {
+  font-size: 9pt;
+}
+
+.resume-section {
+  /*
+    THE BUG: .resume-section elements are real <section> tags, and this
+    stylesheet has a global `section { padding: clamp(3.5rem, 8vw,
+    6.5rem) ... }` rule meant for the live page's main content sections
+    (Hero, Skills, Experience, etc.) — which, being a plain tag
+    selector, was also silently applying to these résumé sections and
+    adding up to 6.5rem (104px) of padding above AND below each one.
+    That's the "big gaps" bug. Explicitly zeroing everything the global
+    rule sets is what actually fixes it — a class selector like this
+    one is more specific than a tag selector, so these resets reliably win.
+  */
+  max-width: none;
+  padding: 0;
+  margin: 0 0 8pt;
+}
+
+.resume-section h2 {
+  font-size: 10pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 0.75pt solid #000;
+  padding-bottom: 1.5pt;
+  margin-bottom: 5pt;
+}
+
+.resume-entry {
+  margin-bottom: 6pt;
+  page-break-inside: avoid;
+}
+
+.resume-entry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10pt;
+  font-size: 10pt;
+}
+
+.resume-entry-sub {
+  font-style: italic;
+  font-size: 9.5pt;
+  margin-bottom: 2pt;
+}
+
+.resume-entry ul {
+  margin: 3pt 0 0;
+  padding-left: 13pt;
+  list-style: disc; /* global `ul, ol { list-style: none }` reset strips these otherwise */
+}
+
+.resume-entry li {
+  font-size: 9.5pt;
+  line-height: 1.25;
+  margin-bottom: 1pt;
+}
+
+#resumeSkills {
+  font-size: 9.5pt;
+  line-height: 1.4;
+}
+/* ═══════════════════════════════════════════════════════════════
+   MULTI-PAGE RESTRUCTURE ADDITIONS
+   ───────────────────────────────────────────────────────────────
+   Added when the single-page portfolio was split into dedicated
+   pages (Experience, Projects, Certifications) with lightweight
+   teasers left behind on the Home page. Kept in one block at the
+   end of the file, rather than scattered inline, so it's obvious
+   what changed and where when comparing against the original.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── PAGE HERO — compact intro banner for dedicated pages ──
+   Same role as the big .hero section on Home, but far shorter:
+   these pages lead with their content, not a second full intro. */
+.page-hero {
+  padding-top: clamp(2.5rem, 6vw, 4rem);
+  padding-bottom: clamp(1.5rem, 3vw, 2rem);
+}
+
+.page-hero-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+}
+
+.page-hero-back:hover { color: var(--text-primary); }
+
+.page-hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.page-hero-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.page-hero-desc {
+  font-size: 15px;
+  color: var(--text-muted);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+/* ── TEASER SECTIONS — "view all" CTA shown under a trimmed-down
+   section on Home, pointing to that section's dedicated page ── */
+.teaser-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.teaser-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  padding: 12px 22px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.teaser-cta-link:hover {
+  background-color: var(--surface-2);
+  border-color: var(--gray-400);
+  transform: translateY(-2px);
+}
+
+.teaser-cta-link svg {
+  transition: transform 0.2s ease;
+}
+
+.teaser-cta-link:hover svg {
+  transform: translateX(3px);
+}
+
+/* ── SKILLS STRIP — Home-page teaser replacing the old 4-card
+   proficiency grid. No proficiency bars — just a compact, grouped
+   row of chips (icon + name) so the full stack is still scannable
+   without asking a first-time visitor to read a 20-item scorecard. */
+.skills-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.skills-strip-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.skills-strip-label {
+  flex-shrink: 0;
+  width: 96px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.skills-strip-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+}
+
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-mid);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 12px 6px 8px;
+  border-radius: 100px;
+  transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+.skill-chip:hover {
+  border-color: var(--gray-400);
+  background-color: var(--surface-2);
+  transform: translateY(-2px);
+}
+
+.skill-chip-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ── EXPERIENCE TEASER — Home shows only the current role; the full
+   timeline (plus résumé download) lives on the dedicated page. ── */
+.exp-teaser-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* ── CERTIFICATIONS PAGE — page-level grouping when Achievements and
+   Certifications are shown together on their own dedicated page. ── */
+.combined-section-gap {
+  height: clamp(2rem, 5vw, 3.5rem);
+}
+
+@media (max-width: 640px) {
+  .skills-strip-group { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+  .skills-strip-label { width: auto; }
+}

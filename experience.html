@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════
+  experience.html — Portfolio Experience & Résumé
+  Author   : Your Name
+  Purpose  : Part of a multi-page portfolio (split from a single
+             long-scroll page so Projects, Certifications, and
+             Experience each get their own dedicated page instead
+             of competing for space on Home).
+  ═══════════════════════════════════════════════════════
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Experience & Résumé | Your Name</title>
+  <meta name="description" content="Full work history for Your Name, Full Stack Developer — every role, key achievements, and a downloadable résumé." />
+  <meta name="keywords" content="full stack developer experience, work history, résumé, CV, React developer, Node.js developer" />
+  <meta name="author"    content="Your Name" />
+  <meta name="robots"    content="index, follow" />
+  <link rel="canonical"  href="https://yourportfolio.com/experience.html" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://yourportfolio.com/experience.html" />
+  <meta property="og:title"       content="Experience & Résumé | Your Name" />
+  <meta property="og:description" content="Full work history, key achievements, and a downloadable résumé for Your Name, Full Stack Developer." />
+  <meta property="og:image"       content="https://yourportfolio.com/og-image.png" />
+  <meta property="og:locale"      content="en_US" />
+  <meta property="og:site_name"   content="Your Name Portfolio" />
+
+  <meta name="twitter:card"      content="summary_large_image" />
+  <meta name="twitter:url"       content="https://yourportfolio.com/experience.html" />
+  <meta name="twitter:title"     content="Experience & Résumé | Your Name" />
+  <meta name="twitter:description" content="Full work history, key achievements, and a downloadable résumé for Your Name, Full Stack Developer." />
+  <meta name="twitter:image"     content="https://yourportfolio.com/og-image.png" />
+  <meta name="twitter:image:alt" content="Your Name — Full Stack Developer portfolio" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Your Name",
+    "url": "https://yourportfolio.com",
+    "jobTitle": "Full Stack Developer",
+    "description": "Full Stack Developer specializing in React, Node.js, and PostgreSQL.",
+    "knowsAbout": ["React", "Node.js", "TypeScript", "PostgreSQL", "Docker"],
+    "sameAs": [
+      "https://github.com/yourusername",
+      "https://linkedin.com/in/yourusername"
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+  <meta name="theme-color" content="#fafafa" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav role="navigation" aria-label="Main navigation">
+
+    <!-- Logo / home link — wraps in <a> so it's keyboard-focusable -->
+    <a class="nav-logo" href="index.html">
+      <span class="logo-bracket">&lt;</span>yn<span class="logo-bracket">/&gt;</span>
+    </a>
+
+    <!--
+      Nav links list. On Home, in-page sections use "#anchor" hrefs;
+      elsewhere they point at "index.html#anchor" or a dedicated page
+      (e.g. "projects.html") since that content no longer lives here.
+    -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="experience.html" class="active">Experience</a></li>
+      <li><a href="index.html#github">GitHub</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="certifications.html">Certifications</a></li>
+      <li><a href="index.html#contact" class="nav-cta">Let's talk</a></li>
+    </ul>
+
+    <button class="cmdk-trigger" id="cmdkTrigger" aria-label="Open command palette (Ctrl+K)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <path d="M21 21l-4.3-4.3"/>
+      </svg>
+      <span class="cmdk-trigger-kbd">Ctrl K</span>
+    </button>
+
+    <button class="theme-toggle" id="themeToggle"
+            aria-label="Toggle dark mode" aria-pressed="false">
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+
+    <button class="hamburger" id="hamburger"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </nav>
+
+  <main>
+
+    <div class="page-hero">
+      <a class="page-hero-back" href="index.html">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to home
+      </a>
+      <p class="page-hero-eyebrow">Career history</p>
+      <h1 class="page-hero-title">Experience &amp; Résumé</h1>
+      <p class="page-hero-desc">
+        Every role, in full — plus the achievements Home only has room to
+        summarize. Want it on paper? Download button is below.
+      </p>
+      <div class="hero-actions" style="margin-top: 1.75rem;">
+        <button type="button" class="btn-primary" id="downloadResumeBtn">
+          Download Résumé
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+<!-- ══════════════════════════════════════
+         SECTION 03 — EXPERIENCE
+         Vertical timeline layout.
+         Uses <article> for each job entry — semantically correct since
+         each entry is a self-contained piece of content.
+    ══════════════════════════════════════ -->
+    <section id="experience" aria-labelledby="exp-heading">
+
+      <!--
+        fade-in now lives on each .exp-item individually (see nth-child
+        transition-delay rules in style.css) so entries cascade in one
+        after another instead of the whole timeline appearing at once.
+      -->
+      <div class="timeline">
+
+        <!-- JOB ENTRY 1: Most recent first (reverse chronological — standard for devs)
+             exp-item--current → adds the pulsing badge ring + "Current" pill,
+             since this is the only entry still marked "Present" -->
+        <article class="exp-item exp-item--current fade-in">
+          <!-- Numbered badge on the timeline line -->
+          <div class="exp-badge" aria-hidden="true">01</div>
+          <!-- Role title + date range on same row, wraps on mobile -->
+          <div class="exp-meta">
+            <h3 class="exp-role">
+              Full Stack Developer
+              <span class="exp-current-tag">Current</span>
+            </h3>
+            <span class="exp-period">2023 — Present</span>
+          </div>
+          <p class="exp-company">Company Name · Full-time</p>
+          <p class="exp-desc">
+            Built and maintained multiple client-facing applications from scratch.
+            Led frontend architecture decisions, optimized API response times by 40%,
+            and shipped a real-time notification system used by 10k+ users.
+          </p>
+          <!-- Tech stack tags for this role -->
+          <div class="exp-tags">
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">Docker</span>
+          </div>
+
+          <!--
+            KEY ACHIEVEMENTS — Level 4.1 addition
+            Collapsed by default; tapping the toggle reveals 2-3 concrete,
+            specific wins beyond the one-paragraph summary above. Same
+            0fr→1fr grid animation as the case study accordion, for the
+            same reason: no JS height-measuring needed.
+          -->
+          <button type="button" class="exp-toggle" aria-expanded="false">
+            <span class="exp-toggle-label">Key achievements</span>
+            <svg class="exp-toggle-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="exp-achievements-wrap">
+            <ul class="exp-achievements">
+              <li>Rebuilt the checkout flow, cutting cart-abandonment rate by 18%</li>
+              <li>Introduced a shared component library adopted across 3 internal teams</li>
+              <li>Mentored 2 junior developers through their first production deploys</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- JOB ENTRY 2 -->
+        <article class="exp-item fade-in">
+          <div class="exp-badge" aria-hidden="true">02</div>
+          <div class="exp-meta">
+            <h3 class="exp-role">Frontend Developer</h3>
+            <span class="exp-period">2022 — 2023</span>
+          </div>
+          <p class="exp-company">Another Company · Contract</p>
+          <p class="exp-desc">
+            Collaborated with design and product teams to deliver pixel-perfect UI components.
+            Improved Lighthouse score from 62 to 94 through lazy loading, code splitting,
+            and CDN caching strategies.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">Next.js</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">Tailwind</span>
+          </div>
+
+          <button type="button" class="exp-toggle" aria-expanded="false">
+            <span class="exp-toggle-label">Key achievements</span>
+            <svg class="exp-toggle-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="exp-achievements-wrap">
+            <ul class="exp-achievements">
+              <li>Cut largest-contentful-paint time by 2.1s on the main marketing pages</li>
+              <li>Built a reusable design-token system shared with the design team</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- JOB ENTRY 3 -->
+        <article class="exp-item fade-in">
+          <div class="exp-badge" aria-hidden="true">03</div>
+          <div class="exp-meta">
+            <h3 class="exp-role">Junior Web Developer</h3>
+            <span class="exp-period">2021 — 2022</span>
+          </div>
+          <p class="exp-company">Startup Name · Full-time</p>
+          <p class="exp-desc">
+            Took ownership of the company's internal dashboard. Introduced TypeScript
+            to the codebase and mentored two interns on React best practices.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">JavaScript</span>
+            <span class="tag">Express</span>
+            <span class="tag">MongoDB</span>
+          </div>
+
+          <button type="button" class="exp-toggle" aria-expanded="false">
+            <span class="exp-toggle-label">Key achievements</span>
+            <svg class="exp-toggle-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="exp-achievements-wrap">
+            <ul class="exp-achievements">
+              <li>Migrated the dashboard's legacy JS codebase to TypeScript with zero downtime</li>
+              <li>Wrote the team's first onboarding guide, now used for every new hire</li>
+            </ul>
+          </div>
+        </article>
+
+      </div><!-- /timeline -->
+    </section><!-- /experience -->
+
+
+    
+  </main>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+       Minimal 3-column layout: logo · copyright · stack credit
+       Wraps to single column on mobile (CSS).
+  ══════════════════════════════════════════ -->
+  <footer>
+    <!-- Repeat the logo for brand consistency at page bottom -->
+    <p class="footer-logo">
+      <span class="logo-bracket">&lt;</span>yn<span class="logo-bracket">/&gt;</span>
+    </p>
+    <p class="footer-copy">© 2025 Your Name · Crafted with care</p>
+    <!-- Brief tech credit — also useful for recruiters skimming source -->
+    <p class="footer-stack">HTML · CSS · JS</p>
+    <!--
+      VISITOR COUNTER — Level 5 addition
+      Starts hidden; initVisitorCounter() in main.js only reveals it
+      once the real count comes back successfully (or leaves it hidden
+      permanently if the free counting API is unreachable — a missing
+      visitor count just isn't worth showing an error state for).
+    -->
+    <!--
+      VISITOR COUNTER — Level 5 addition (rebuilt)
+      Was originally a fetch() call to countapi.xyz — that service has
+      actually shut down, which is exactly why nothing ever appeared
+      (our own error-handling was correctly hiding it, just against a
+      dead API). Rebuilt as a plain <img> pointed at visitorbadge.io
+      instead: no fetch, no JSON, no CORS to worry about — same
+      "free public image service" pattern as the skillicons/ghchart
+      logos elsewhere on this page, which have been solid so far.
+    -->
+    <img class="visitor-counter" id="visitorCounter"
+         alt="Visitor count"
+         src="https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fcomsolodev-1.github.io%2FLevel4_Portfolio%2F&labelColor=%23252525&countColor=%23636363&style=flat&labelStyle=none"
+         hidden />
+    <!-- ↑ the `path=` value is your live site URL, URL-encoded. Update
+         it here if you rename the repo/site — otherwise it'll keep
+         counting hits for the OLD url instead of wherever this
+         actually ends up living. (main.js just wires up show/hide,
+         the URL itself lives only here — one source of truth.) -->
+  </footer>
+
+  <!--
+    RÉSUMÉ SOURCE DATA — MULTI-PAGE ADDITION
+    populateResumeDocument() in main.js (see below) builds the printable
+    résumé by reading real content out of the current page via
+    `.contact-social a` and `.skill-card` / `.skill-row-name`. Those
+    now live on Home, not here — so this hidden, never-rendered block
+    mirrors just the text of that content ([hidden] keeps it out of
+    layout and off-screen readers won't announce it as content, but
+    querySelectorAll can still read it). Keep this in sync with the
+    Contact section and Skills strip on index.html if you edit either.
+  -->
+  <div id="resumeSourceData" hidden aria-hidden="true">
+    <ul class="contact-social">
+      <li><a href="mailto:you@email.com">you@email.com</a></li>
+      <li><a href="https://github.com/yourusername">github.com/yourusername</a></li>
+      <li><a href="https://linkedin.com/in/yourusername">linkedin.com/in/yourusername</a></li>
+    </ul>
+
+    <div class="skill-card">
+      <h3 class="skill-category">Frontend</h3>
+      <span class="skill-row-name">React</span>
+      <span class="skill-row-name">Next.js</span>
+      <span class="skill-row-name">TypeScript</span>
+      <span class="skill-row-name">Tailwind CSS</span>
+      <span class="skill-row-name">Figma</span>
+    </div>
+    <div class="skill-card">
+      <h3 class="skill-category">Backend</h3>
+      <span class="skill-row-name">Node.js</span>
+      <span class="skill-row-name">Express</span>
+      <span class="skill-row-name">GraphQL</span>
+      <span class="skill-row-name">Python</span>
+      <span class="skill-row-name">WebSockets</span>
+    </div>
+    <div class="skill-card">
+      <h3 class="skill-category">Database</h3>
+      <span class="skill-row-name">PostgreSQL</span>
+      <span class="skill-row-name">MongoDB</span>
+      <span class="skill-row-name">Redis</span>
+      <span class="skill-row-name">Prisma ORM</span>
+    </div>
+    <div class="skill-card">
+      <h3 class="skill-category">Tools &amp; Ops</h3>
+      <span class="skill-row-name">Git</span>
+      <span class="skill-row-name">GitHub</span>
+      <span class="skill-row-name">Docker</span>
+      <span class="skill-row-name">CI/CD</span>
+      <span class="skill-row-name">Vercel</span>
+      <span class="skill-row-name">Linux</span>
+    </div>
+
+    <!--
+      Mirrors the .cert-card entries from certifications.html — kept in
+      sync manually since Certifications lives on its own page now.
+      populateResumeDocument() only reads `.cert-title` / `.cert-issuer`
+      text (top 3), so icons/links aren't needed here. Update this list
+      whenever you edit the real cards on certifications.html.
+    -->
+    <div class="cert-card">
+      <h3 class="cert-title">[Add your certification]</h3>
+      <p class="cert-issuer">Issuing organization · <span class="cert-date">2025</span></p>
+    </div>
+    <div class="cert-card">
+      <h3 class="cert-title">[Add your certification]</h3>
+      <p class="cert-issuer">Issuing organization · <span class="cert-date">2025</span></p>
+    </div>
+  </div>
+
+  
+<!--
+    RESUME DOCUMENT — Level 5 rebuild
+    Completely invisible on-screen ([hidden] below) — this only ever
+    renders when @media print is active, which only happens via the
+    "Download Resume" button's window.print() call (or a manual
+    Ctrl/Cmd+P, which will produce the same result).
+
+    It is NOT a copy of the marketing page — it's a proper single-column
+    Harvard-format résumé (Name/contact header → Education → Experience
+    → Skills → Certifications), built from scratch as its own document
+    and then POPULATED with real content read out of the live page by
+    populateResumeDocument() in main.js, so the résumé can never drift
+    out of sync with what the site actually says about you.
+
+    Education has no source section on the live page to pull from, so
+    that one block is edited directly here rather than generated —
+    everything else below it is populated by JS.
+  -->
+  <div id="resumeDocument" hidden>
+    <header class="resume-header">
+      <h1 id="resumeName">Your Name</h1>
+      <p class="resume-role" id="resumeRole">Full Stack Developer</p>
+      <p class="resume-contact" id="resumeContact"></p>
+    </header>
+
+    <section class="resume-section">
+      <h2>Education</h2>
+      <div class="resume-entry">
+        <div class="resume-entry-row">
+          <strong>[Add your school / university]</strong>
+          <span>[Add years attended]</span>
+        </div>
+        <p class="resume-entry-sub">[Add degree and field of study]</p>
+      </div>
+    </section>
+
+    <section class="resume-section">
+      <h2>Experience</h2>
+      <div id="resumeExperience"></div>
+    </section>
+
+    <section class="resume-section">
+      <h2>Skills</h2>
+      <p id="resumeSkills"></p>
+    </section>
+
+    <section class="resume-section" id="resumeCertSection">
+      <h2>Certifications</h2>
+      <div id="resumeCertifications"></div>
+    </section>
+  </div>
+
+  <!--
+    COMMAND PALETTE — Level 4 addition
+    Hidden by default (the [hidden] attribute). initCommandPalette() in
+    main.js toggles it via Cmd/Ctrl+K or the #cmdkTrigger button, filters
+    .cmdk-item rows as you type, and handles Up/Down/Enter/Esc.
+    role="dialog" + aria-modal so screen readers treat it as a proper
+    modal rather than page content that happens to be on top.
+
+    MULTI-PAGE ADDITION: data-href is either a same-page anchor ("#...")
+    which still smooth-scrolls, or a cross-page link ("projects.html",
+    "index.html#skills") which main.js now navigates to directly —
+    see the updated activate() logic in initCommandPalette().
+  -->
+  <div class="cmdk-overlay" id="cmdkOverlay" hidden>
+    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="cmdk-input-row">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M21 21l-4.3-4.3"/>
+        </svg>
+        <input type="text" id="cmdkInput" class="cmdk-input"
+               placeholder="Jump to a page or section…"
+               autocomplete="off" spellcheck="false" />
+        <kbd class="cmdk-esc">Esc</kbd>
+      </div>
+
+      <ul class="cmdk-list" id="cmdkList">
+        <li class="cmdk-item" data-href="index.html" data-keywords="home top start">
+          <span class="cmdk-item-label">Home</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="index.html#skills" data-keywords="frontend backend database tools stack">
+          <span class="cmdk-item-label">Skills</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="#hero" data-keywords="work jobs history timeline resume cv download">
+          <span class="cmdk-item-label">Experience & Résumé</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="projects.html" data-keywords="work portfolio case study">
+          <span class="cmdk-item-label">Projects</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="certifications.html" data-keywords="credentials courses badges milestones achievements">
+          <span class="cmdk-item-label">Certifications & Achievements</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="index.html#contact" data-keywords="email message hire talk">
+          <span class="cmdk-item-label">Contact</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-filter="theme-toggle" data-keywords="dark light mode theme">
+          <span class="cmdk-item-label">Toggle dark / light mode</span>
+          <span class="cmdk-item-hint">Action</span>
+        </li>
+      </ul>
+
+      <p class="cmdk-empty" id="cmdkEmpty" hidden>No matches — try a different word.</p>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════
+  projects.html — Portfolio Projects
+  Author   : Your Name
+  Purpose  : Part of a multi-page portfolio (split from a single
+             long-scroll page so Projects, Certifications, and
+             Experience each get their own dedicated page instead
+             of competing for space on Home).
+  ═══════════════════════════════════════════════════════
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Projects | Your Name</title>
+  <meta name="description" content="Full project portfolio for Your Name, Full Stack Developer — filterable by category, each with an in-depth case study." />
+  <meta name="keywords" content="full stack developer projects, portfolio, case studies, React projects, Node.js projects, open source" />
+  <meta name="author"    content="Your Name" />
+  <meta name="robots"    content="index, follow" />
+  <link rel="canonical"  href="https://yourportfolio.com/projects.html" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://yourportfolio.com/projects.html" />
+  <meta property="og:title"       content="Projects | Your Name" />
+  <meta property="og:description" content="Full project portfolio, filterable by category, each with an in-depth case study." />
+  <meta property="og:image"       content="https://yourportfolio.com/og-image.png" />
+  <meta property="og:locale"      content="en_US" />
+  <meta property="og:site_name"   content="Your Name Portfolio" />
+
+  <meta name="twitter:card"      content="summary_large_image" />
+  <meta name="twitter:url"       content="https://yourportfolio.com/projects.html" />
+  <meta name="twitter:title"     content="Projects | Your Name" />
+  <meta name="twitter:description" content="Full project portfolio, filterable by category, each with an in-depth case study." />
+  <meta name="twitter:image"     content="https://yourportfolio.com/og-image.png" />
+  <meta name="twitter:image:alt" content="Your Name — Full Stack Developer portfolio" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Your Name",
+    "url": "https://yourportfolio.com",
+    "jobTitle": "Full Stack Developer",
+    "description": "Full Stack Developer specializing in React, Node.js, and PostgreSQL.",
+    "knowsAbout": ["React", "Node.js", "TypeScript", "PostgreSQL", "Docker"],
+    "sameAs": [
+      "https://github.com/yourusername",
+      "https://linkedin.com/in/yourusername"
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+  <meta name="theme-color" content="#fafafa" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav role="navigation" aria-label="Main navigation">
+
+    <!-- Logo / home link — wraps in <a> so it's keyboard-focusable -->
+    <a class="nav-logo" href="index.html">
+      <span class="logo-bracket">&lt;</span>yn<span class="logo-bracket">/&gt;</span>
+    </a>
+
+    <!--
+      Nav links list. On Home, in-page sections use "#anchor" hrefs;
+      elsewhere they point at "index.html#anchor" or a dedicated page
+      (e.g. "projects.html") since that content no longer lives here.
+    -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="experience.html">Experience</a></li>
+      <li><a href="index.html#github">GitHub</a></li>
+      <li><a href="projects.html" class="active">Projects</a></li>
+      <li><a href="certifications.html">Certifications</a></li>
+      <li><a href="index.html#contact" class="nav-cta">Let's talk</a></li>
+    </ul>
+
+    <button class="cmdk-trigger" id="cmdkTrigger" aria-label="Open command palette (Ctrl+K)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <path d="M21 21l-4.3-4.3"/>
+      </svg>
+      <span class="cmdk-trigger-kbd">Ctrl K</span>
+    </button>
+
+    <button class="theme-toggle" id="themeToggle"
+            aria-label="Toggle dark mode" aria-pressed="false">
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+
+    <button class="hamburger" id="hamburger"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </nav>
+
+  <main>
+
+    <div class="page-hero">
+      <a class="page-hero-back" href="index.html">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to home
+      </a>
+      <p class="page-hero-eyebrow">Selected work</p>
+      <h1 class="page-hero-title">Projects</h1>
+      <p class="page-hero-desc">
+        Filter by category, or open any card for the full case study —
+        the problem, the process, and the result.
+      </p>
+    </div>
+
+<!-- ══════════════════════════════════════
+         SECTION 05 — PROJECTS
+         3-column card grid.
+         <article> is used per project — each is a self-contained item.
+         project-card--featured → first card has dark background for visual hierarchy.
+    ══════════════════════════════════════ -->
+    <section id="projects" aria-labelledby="projects-heading">
+
+      <!--
+        FILTER PILLS — Level 3 addition
+        data-filter="all" is the default active pill.
+        Each other pill's data-filter must match a word inside the
+        data-category attribute on the .project-card articles below —
+        see filterProjects() in main.js for the matching logic.
+        role="group" + aria-label → announced as a single control group,
+        not a random list of buttons, to screen readers.
+      -->
+      <div class="project-filters" role="group" aria-label="Filter projects by category">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="frontend">Frontend</button>
+        <button class="filter-pill" data-filter="backend">Backend</button>
+        <button class="filter-pill" data-filter="fullstack">Full Stack</button>
+        <button class="filter-pill" data-filter="opensource">Open Source</button>
+      </div>
+
+      <div class="projects-grid fade-in">
+
+        <!-- PROJECT 1: Featured (dark card) -->
+        <article class="project-card project-card--featured" data-category="fullstack frontend backend">
+          <div class="project-header">
+            <span class="project-num">01</span>
+            <div class="project-links">
+              <!-- target="_blank" opens in new tab; rel="noopener" prevents
+                   the new tab from accessing window.opener (security best practice) -->
+              <a href="#" class="project-link" target="_blank"
+                 rel="noopener noreferrer" aria-label="View Project Alpha live site">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                Live
+              </a>
+              <a href="#" class="project-link" target="_blank"
+                 rel="noopener noreferrer" aria-label="View Project Alpha on GitHub">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+                GitHub
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">Project Alpha</h3>
+          <p class="project-desc">
+            A full-stack SaaS dashboard with authentication, billing, and real-time
+            data visualization. Built from scratch to production in 6 weeks.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">Next.js</span>
+            <span class="tag">Stripe</span>
+            <span class="tag">Postgres</span>
+          </div>
+          <!--
+            CASE STUDY — Level 4 addition
+            The button opens #caseStudyModal and copies in the hidden
+            .case-study-content block below it. Kept inside the same
+            <article> as its project so the two never drift out of
+            sync when cards are reordered or duplicated for new projects.
+          -->
+          <button class="case-study-btn" data-project="alpha">
+            View case study
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+          <!--
+            Structured as a 3-step numbered flow (Problem → Process → Result)
+            instead of plain stacked headings/paragraphs — reuses the same
+            numbered-circle + connecting-line language as the Experience
+            timeline, so it reads as "the site's case study format" rather
+            than a wall of text. See .cs-flow / .cs-step in style.css.
+          -->
+          <div class="case-study-content" data-project="alpha" hidden>
+            <div class="cs-progress" aria-hidden="true">
+              <span class="cs-progress-dot"></span>
+              <span class="cs-progress-dot"></span>
+              <span class="cs-progress-dot"></span>
+            </div>
+            <div class="cs-flow">
+              <div class="cs-step cs-step--problem">
+                <button type="button" class="cs-step-header" aria-expanded="false">
+                  <span class="cs-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                  <h4 class="cs-step-title">The problem</h4>
+                  <svg class="cs-step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <div class="cs-step-panel-wrap">
+                  <div class="cs-step-panel-inner">
+                    <p>The client was running billing and usage tracking through a patchwork of spreadsheets and a third-party dashboard that didn't talk to their own database, so support tickets about incorrect invoices were a weekly occurrence.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="cs-step cs-step--process">
+                <button type="button" class="cs-step-header" aria-expanded="false">
+                  <span class="cs-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+                  <h4 class="cs-step-title">The process</h4>
+                  <svg class="cs-step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <div class="cs-step-panel-wrap">
+                  <div class="cs-step-panel-inner">
+                    <p>Designed a Postgres schema that treated usage events as the source of truth, then layered Stripe's metered billing on top so invoices generate directly from real usage instead of a manually maintained count. Built the dashboard in Next.js with server components for the data-heavy views to keep first load fast.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="cs-step cs-step--result">
+                <button type="button" class="cs-step-header" aria-expanded="false">
+                  <span class="cs-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span>
+                  <h4 class="cs-step-title">The result</h4>
+                  <svg class="cs-step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <div class="cs-step-panel-wrap">
+                  <div class="cs-step-panel-inner">
+                    <p>Billing-related support tickets dropped to near zero after launch, and the client could finally see real-time usage per customer instead of waiting on end-of-month exports.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 2 -->
+        <article class="project-card" data-category="backend opensource">
+          <div class="project-header">
+            <span class="project-num">02</span>
+            <div class="project-links">
+              <a href="#" class="project-link" target="_blank"
+                 rel="noopener noreferrer" aria-label="View CLI Tool on GitHub">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+                GitHub
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">Open Source CLI Tool</h3>
+          <p class="project-desc">
+            Auto-generates TypeScript types from REST API responses.
+            Picked up 400+ GitHub stars in the first month.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">TypeScript</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">CLI</span>
+          </div>
+          <button class="case-study-btn" data-project="cli">
+            View case study
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+          <div class="case-study-content" data-project="cli" hidden>
+            <div class="cs-progress" aria-hidden="true">
+              <span class="cs-progress-dot"></span>
+              <span class="cs-progress-dot"></span>
+              <span class="cs-progress-dot"></span>
+            </div>
+            <div class="cs-flow">
+              <div class="cs-step cs-step--problem">
+                <button type="button" class="cs-step-header" aria-expanded="false">
+                  <span class="cs-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                  <h4 class="cs-step-title">The problem</h4>
+                  <svg class="cs-step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <div class="cs-step-panel-wrap">
+                  <div class="cs-step-panel-inner">
+                    <p>Every project on the team hand-wrote TypeScript interfaces for API responses, and they'd silently go stale the moment the backend changed a field — bugs that only showed up at runtime.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="cs-step cs-step--process">
+                <button type="button" class="cs-step-header" aria-expanded="false">
+                  <span class="cs-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+                  <h4 class="cs-step-title">The process</h4>
+                  <svg class="cs-step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <div class="cs-step-panel-wrap">
+                  <div class="cs-step-panel-inner">
+                    <p>Built a CLI that hits a given endpoint, infers the shape of the JSON response, and generates matching TypeScript types automatically, with a watch mode for local development. Published it as an open-source npm package with a small, dependency-light core so it'd be easy for other maintainers to audit.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="cs-step cs-step--result">
+                <button type="button" class="cs-step-header" aria-expanded="false">
+                  <span class="cs-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span>
+                  <h4 class="cs-step-title">The result</h4>
+                  <svg class="cs-step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <div class="cs-step-panel-wrap">
+                  <div class="cs-step-panel-inner">
+                    <p>Picked up 400+ GitHub stars in its first month and got adopted by a couple of other teams outside the original project, without any marketing beyond a single Show HN-style post.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 3 -->
+        <article class="project-card" data-category="frontend fullstack">
+          <div class="project-header">
+            <span class="project-num">03</span>
+            <div class="project-links">
+              <a href="#" class="project-link" target="_blank"
+                 rel="noopener noreferrer" aria-label="View E-commerce Platform live site">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                Live
+              </a>
+            </div>
+          </div>
+          <h3 class="project-title">E-commerce Platform</h3>
+          <p class="project-desc">
+            Headless store with custom CMS, inventory management, and payment processing.
+            Handles 500+ orders per day.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">React</span>
+            <span class="tag">Sanity</span>
+            <span class="tag">Stripe</span>
+          </div>
+          <button class="case-study-btn" data-project="ecommerce">
+            View case study
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+          <div class="case-study-content" data-project="ecommerce" hidden>
+            <div class="cs-progress" aria-hidden="true">
+              <span class="cs-progress-dot"></span>
+              <span class="cs-progress-dot"></span>
+              <span class="cs-progress-dot"></span>
+            </div>
+            <div class="cs-flow">
+              <div class="cs-step cs-step--problem">
+                <button type="button" class="cs-step-header" aria-expanded="false">
+                  <span class="cs-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                  <h4 class="cs-step-title">The problem</h4>
+                  <svg class="cs-step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <div class="cs-step-panel-wrap">
+                  <div class="cs-step-panel-inner">
+                    <p>The client's existing store was locked into a template-based platform that couldn't support the custom product configurator their catalog needed, and every content change required a developer.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="cs-step cs-step--process">
+                <button type="button" class="cs-step-header" aria-expanded="false">
+                  <span class="cs-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+                  <h4 class="cs-step-title">The process</h4>
+                  <svg class="cs-step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <div class="cs-step-panel-wrap">
+                  <div class="cs-step-panel-inner">
+                    <p>Went headless: React storefront on the frontend, Sanity as the content layer so the client's team could edit products and pages themselves, and Stripe handling payments and subscription billing for a recurring-order option. Paid particular attention to checkout performance since that's where drop-off actually costs revenue.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="cs-step cs-step--result">
+                <button type="button" class="cs-step-header" aria-expanded="false">
+                  <span class="cs-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span>
+                  <h4 class="cs-step-title">The result</h4>
+                  <svg class="cs-step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <div class="cs-step-panel-wrap">
+                  <div class="cs-step-panel-inner">
+                    <p>The store now handles 500+ orders per day, and the client's own team ships content and product changes without opening a ticket.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /projects-grid -->
+    </section><!-- /projects -->
+
+
+    
+  </main>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+       Minimal 3-column layout: logo · copyright · stack credit
+       Wraps to single column on mobile (CSS).
+  ══════════════════════════════════════════ -->
+  <footer>
+    <!-- Repeat the logo for brand consistency at page bottom -->
+    <p class="footer-logo">
+      <span class="logo-bracket">&lt;</span>yn<span class="logo-bracket">/&gt;</span>
+    </p>
+    <p class="footer-copy">© 2025 Your Name · Crafted with care</p>
+    <!-- Brief tech credit — also useful for recruiters skimming source -->
+    <p class="footer-stack">HTML · CSS · JS</p>
+    <!--
+      VISITOR COUNTER — Level 5 addition
+      Starts hidden; initVisitorCounter() in main.js only reveals it
+      once the real count comes back successfully (or leaves it hidden
+      permanently if the free counting API is unreachable — a missing
+      visitor count just isn't worth showing an error state for).
+    -->
+    <!--
+      VISITOR COUNTER — Level 5 addition (rebuilt)
+      Was originally a fetch() call to countapi.xyz — that service has
+      actually shut down, which is exactly why nothing ever appeared
+      (our own error-handling was correctly hiding it, just against a
+      dead API). Rebuilt as a plain <img> pointed at visitorbadge.io
+      instead: no fetch, no JSON, no CORS to worry about — same
+      "free public image service" pattern as the skillicons/ghchart
+      logos elsewhere on this page, which have been solid so far.
+    -->
+    <img class="visitor-counter" id="visitorCounter"
+         alt="Visitor count"
+         src="https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fcomsolodev-1.github.io%2FLevel4_Portfolio%2F&labelColor=%23252525&countColor=%23636363&style=flat&labelStyle=none"
+         hidden />
+    <!-- ↑ the `path=` value is your live site URL, URL-encoded. Update
+         it here if you rename the repo/site — otherwise it'll keep
+         counting hits for the OLD url instead of wherever this
+         actually ends up living. (main.js just wires up show/hide,
+         the URL itself lives only here — one source of truth.) -->
+  </footer>
+
+<!--
+    CASE STUDY MODAL — Level 4 addition
+    A single shared modal. Clicking any .case-study-btn copies the
+    matching .case-study-content block (same data-project value) into
+    #caseStudyBody — see initCaseStudyModal() in main.js. Keeps the
+    HTML for each case study inline with its project card (easy to
+    maintain) while only needing one modal DOM node.
+  -->
+  <div class="modal-overlay" id="caseStudyOverlay" hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="caseStudyTitle">
+      <button class="modal-close" id="caseStudyClose" aria-label="Close case study">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <p class="modal-eyebrow">Case study</p>
+      <h3 class="modal-title" id="caseStudyTitle"></h3>
+      <div class="modal-body" id="caseStudyBody"></div>
+    </div>
+  </div>
+
+  
+<!--
+    CUSTOM CURSOR LABEL — Level 3 addition
+    A single floating pill that follows the pointer and reads "View →"
+    while hovering a .project-card. Positioned/shown entirely by JS
+    (see initCustomCursor in main.js). aria-hidden because it's purely
+    decorative — the underlying card/link already describes the action.
+    Only activated on fine-pointer (mouse) devices; touch devices never
+    see it, so it never gets in the way on mobile.
+  -->
+  <div class="cursor-label" id="cursorLabel" aria-hidden="true">View project</div>
+
+  <!--
+    main.js loaded at end of <body> (not in <head>) for two reasons:
+    1. DOM is fully parsed before the script runs — no need for DOMContentLoaded workarounds
+    2. Page renders visually before JS is parsed — faster perceived load time
+    Note: EmailJS SDK IS in <head> because main.js calls emailjs.init() immediately on load.
+  -->
+  <!--
+    COMMAND PALETTE — Level 4 addition
+    Hidden by default (the [hidden] attribute). initCommandPalette() in
+    main.js toggles it via Cmd/Ctrl+K or the #cmdkTrigger button, filters
+    .cmdk-item rows as you type, and handles Up/Down/Enter/Esc.
+    role="dialog" + aria-modal so screen readers treat it as a proper
+    modal rather than page content that happens to be on top.
+
+    MULTI-PAGE ADDITION: data-href is either a same-page anchor ("#...")
+    which still smooth-scrolls, or a cross-page link ("projects.html",
+    "index.html#skills") which main.js now navigates to directly —
+    see the updated activate() logic in initCommandPalette().
+  -->
+  <div class="cmdk-overlay" id="cmdkOverlay" hidden>
+    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="cmdk-input-row">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M21 21l-4.3-4.3"/>
+        </svg>
+        <input type="text" id="cmdkInput" class="cmdk-input"
+               placeholder="Jump to a page or section…"
+               autocomplete="off" spellcheck="false" />
+        <kbd class="cmdk-esc">Esc</kbd>
+      </div>
+
+      <ul class="cmdk-list" id="cmdkList">
+        <li class="cmdk-item" data-href="index.html" data-keywords="home top start">
+          <span class="cmdk-item-label">Home</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="index.html#skills" data-keywords="frontend backend database tools stack">
+          <span class="cmdk-item-label">Skills</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="experience.html" data-keywords="work jobs history timeline resume cv download">
+          <span class="cmdk-item-label">Experience & Résumé</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="#hero" data-keywords="work portfolio case study">
+          <span class="cmdk-item-label">Projects</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="certifications.html" data-keywords="credentials courses badges milestones achievements">
+          <span class="cmdk-item-label">Certifications & Achievements</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="index.html#contact" data-keywords="email message hire talk">
+          <span class="cmdk-item-label">Contact</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-filter="theme-toggle" data-keywords="dark light mode theme">
+          <span class="cmdk-item-label">Toggle dark / light mode</span>
+          <span class="cmdk-item-hint">Action</span>
+        </li>
+      </ul>
+
+      <p class="cmdk-empty" id="cmdkEmpty" hidden>No matches — try a different word.</p>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</html>

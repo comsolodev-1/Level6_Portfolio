@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════
+  certifications.html — Portfolio Certifications & Achievements
+  Author   : Your Name
+  Purpose  : Part of a multi-page portfolio (split from a single
+             long-scroll page so Projects, Certifications, and
+             Experience each get their own dedicated page instead
+             of competing for space on Home).
+  ═══════════════════════════════════════════════════════
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Certifications & Achievements | Your Name</title>
+  <meta name="description" content="Certifications and achievements for Your Name, Full Stack Developer — formal credentials and notable milestones, together in one place." />
+  <meta name="keywords" content="full stack developer certifications, credentials, achievements, milestones" />
+  <meta name="author"    content="Your Name" />
+  <meta name="robots"    content="index, follow" />
+  <link rel="canonical"  href="https://yourportfolio.com/certifications.html" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://yourportfolio.com/certifications.html" />
+  <meta property="og:title"       content="Certifications & Achievements | Your Name" />
+  <meta property="og:description" content="Certifications and achievements — formal credentials and notable milestones, together in one place." />
+  <meta property="og:image"       content="https://yourportfolio.com/og-image.png" />
+  <meta property="og:locale"      content="en_US" />
+  <meta property="og:site_name"   content="Your Name Portfolio" />
+
+  <meta name="twitter:card"      content="summary_large_image" />
+  <meta name="twitter:url"       content="https://yourportfolio.com/certifications.html" />
+  <meta name="twitter:title"     content="Certifications & Achievements | Your Name" />
+  <meta name="twitter:description" content="Certifications and achievements — formal credentials and notable milestones, together in one place." />
+  <meta name="twitter:image"     content="https://yourportfolio.com/og-image.png" />
+  <meta name="twitter:image:alt" content="Your Name — Full Stack Developer portfolio" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Your Name",
+    "url": "https://yourportfolio.com",
+    "jobTitle": "Full Stack Developer",
+    "description": "Full Stack Developer specializing in React, Node.js, and PostgreSQL.",
+    "knowsAbout": ["React", "Node.js", "TypeScript", "PostgreSQL", "Docker"],
+    "sameAs": [
+      "https://github.com/yourusername",
+      "https://linkedin.com/in/yourusername"
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+  <meta name="theme-color" content="#fafafa" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav role="navigation" aria-label="Main navigation">
+
+    <!-- Logo / home link — wraps in <a> so it's keyboard-focusable -->
+    <a class="nav-logo" href="index.html">
+      <span class="logo-bracket">&lt;</span>yn<span class="logo-bracket">/&gt;</span>
+    </a>
+
+    <!--
+      Nav links list. On Home, in-page sections use "#anchor" hrefs;
+      elsewhere they point at "index.html#anchor" or a dedicated page
+      (e.g. "projects.html") since that content no longer lives here.
+    -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="experience.html">Experience</a></li>
+      <li><a href="index.html#github">GitHub</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="certifications.html" class="active">Certifications</a></li>
+      <li><a href="index.html#contact" class="nav-cta">Let's talk</a></li>
+    </ul>
+
+    <button class="cmdk-trigger" id="cmdkTrigger" aria-label="Open command palette (Ctrl+K)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <path d="M21 21l-4.3-4.3"/>
+      </svg>
+      <span class="cmdk-trigger-kbd">Ctrl K</span>
+    </button>
+
+    <button class="theme-toggle" id="themeToggle"
+            aria-label="Toggle dark mode" aria-pressed="false">
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+
+    <button class="hamburger" id="hamburger"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </nav>
+
+  <main>
+
+    <div class="page-hero">
+      <a class="page-hero-back" href="index.html">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to home
+      </a>
+      <p class="page-hero-eyebrow">Credibility</p>
+      <h1 class="page-hero-title">Certifications &amp; Achievements</h1>
+      <p class="page-hero-desc">
+        Home only has room for a quick highlight reel — this is the full
+        picture: formal credentials alongside the milestones behind them.
+      </p>
+    </div>
+
+<!-- ══════════════════════════════════════
+         SECTION 02 — ACHIEVEMENTS (Level 5)
+         A quick, scannable credibility strip right after the hero —
+         before asking anyone to read the full Skills/Experience detail.
+         Each badge "unlocks" (pops in) once scrolled into view, staggered
+         left-to-right — see initAchievementsReveal() in main.js.
+    ══════════════════════════════════════ -->
+    <section id="achievements" aria-labelledby="achievements-heading">
+
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 id="achievements-heading">Achievements</h2>
+      </div>
+
+      <!--
+        Icons are inline SVG (same stroke-based style as every other
+        icon on this page) instead of emoji — emoji render inconsistently
+        across OSes/browsers and read as less polished on a professional
+        portfolio.
+      -->
+      <div class="achievements-strip">
+
+        <div class="achievement-badge">
+          <div class="achievement-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+            </svg>
+          </div>
+          <h3 class="achievement-title">100 Days of Code</h3>
+          <p class="achievement-desc">Shipped something and posted about it every day for over 3 months straight.</p>
+        </div>
+
+        <div class="achievement-badge">
+          <div class="achievement-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="6" y1="3" x2="6" y2="15"/>
+              <circle cx="18" cy="6" r="3"/>
+              <circle cx="6" cy="18" r="3"/>
+              <path d="M18 9a9 9 0 0 1-9 9"/>
+            </svg>
+          </div>
+          <h3 class="achievement-title">Open Source Contributor</h3>
+          <p class="achievement-desc">Published a CLI tool as open source — see the case study on the <a href="projects.html">Projects page</a>.</p>
+        </div>
+
+        <div class="achievement-badge">
+          <div class="achievement-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v6M12 22v-6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M16 12h6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/>
+            </svg>
+          </div>
+          <h3 class="achievement-title">4 Portfolio Iterations</h3>
+          <p class="achievement-desc">Rebuilt this site top-to-bottom four times, chasing a genuinely better version each time.</p>
+        </div>
+
+        <div class="achievement-badge">
+          <div class="achievement-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h3 class="achievement-title">Hackathon Ready</h3>
+          <p class="achievement-desc">Missed my first hackathon window — used the momentum to level up this portfolio instead.</p>
+        </div>
+
+      </div><!-- /achievements-strip -->
+    </section><!-- /achievements -->
+
+
+    
+    <div class="combined-section-gap"></div>
+
+<!-- ══════════════════════════════════════
+         SECTION — CERTIFICATIONS (Level 5)
+         Structured differently from Achievements on purpose: these are
+         formal, verifiable credentials (issuer + date + optional link),
+         not quick milestone badges — so they get their own section
+         instead of being folded into the achievements strip.
+    ══════════════════════════════════════ -->
+    <section id="certifications" aria-labelledby="certifications-heading">
+
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 id="certifications-heading">Certifications</h2>
+      </div>
+
+      <div class="certifications-grid">
+
+        <div class="cert-card">
+          <!--
+            Drawn certificate illustration (document + ribbon/seal),
+            not a stock photo — a placeholder photo pulled from some
+            third-party image service risked the same "quietly stops
+            working" problem the visitor counter hit (that service had
+            actually shut down). This is inline SVG, so it can never
+            404 or rate-limit; it just always renders.
+          -->
+          <div class="cert-illustration" aria-hidden="true">
+            <svg width="56" height="56" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="5" width="36" height="46" rx="2"/>
+              <line x1="15" y1="15" x2="37" y2="15"/>
+              <line x1="15" y1="21" x2="37" y2="21"/>
+              <line x1="15" y1="27" x2="30" y2="27"/>
+              <circle cx="45" cy="41" r="10" fill="currentColor" fill-opacity="0.08"/>
+              <circle cx="45" cy="41" r="7"/>
+              <path d="M41.5 47l-3 9 6.5-4 6.5 4-3-9"/>
+            </svg>
+          </div>
+          <div class="cert-info">
+            <h3 class="cert-title">[Add your certification]</h3>
+            <p class="cert-issuer">Issuing organization · <span class="cert-date">2025</span></p>
+          </div>
+          <a href="#" class="cert-link" target="_blank" rel="noopener">
+            View credential
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7M7 7h10v10"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="cert-card">
+          <!--
+            Drawn certificate illustration (document + ribbon/seal),
+            not a stock photo — a placeholder photo pulled from some
+            third-party image service risked the same "quietly stops
+            working" problem the visitor counter hit (that service had
+            actually shut down). This is inline SVG, so it can never
+            404 or rate-limit; it just always renders.
+          -->
+          <div class="cert-illustration" aria-hidden="true">
+            <svg width="56" height="56" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="5" width="36" height="46" rx="2"/>
+              <line x1="15" y1="15" x2="37" y2="15"/>
+              <line x1="15" y1="21" x2="37" y2="21"/>
+              <line x1="15" y1="27" x2="30" y2="27"/>
+              <circle cx="45" cy="41" r="10" fill="currentColor" fill-opacity="0.08"/>
+              <circle cx="45" cy="41" r="7"/>
+              <path d="M41.5 47l-3 9 6.5-4 6.5 4-3-9"/>
+            </svg>
+          </div>
+          <div class="cert-info">
+            <h3 class="cert-title">[Add your certification]</h3>
+            <p class="cert-issuer">Issuing organization · <span class="cert-date">2025</span></p>
+          </div>
+          <a href="#" class="cert-link" target="_blank" rel="noopener">
+            View credential
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7M7 7h10v10"/>
+            </svg>
+          </a>
+        </div>
+
+      </div><!-- /certifications-grid -->
+    </section><!-- /certifications -->
+
+
+    
+  </main>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+       Minimal 3-column layout: logo · copyright · stack credit
+       Wraps to single column on mobile (CSS).
+  ══════════════════════════════════════════ -->
+  <footer>
+    <!-- Repeat the logo for brand consistency at page bottom -->
+    <p class="footer-logo">
+      <span class="logo-bracket">&lt;</span>yn<span class="logo-bracket">/&gt;</span>
+    </p>
+    <p class="footer-copy">© 2025 Your Name · Crafted with care</p>
+    <!-- Brief tech credit — also useful for recruiters skimming source -->
+    <p class="footer-stack">HTML · CSS · JS</p>
+    <!--
+      VISITOR COUNTER — Level 5 addition
+      Starts hidden; initVisitorCounter() in main.js only reveals it
+      once the real count comes back successfully (or leaves it hidden
+      permanently if the free counting API is unreachable — a missing
+      visitor count just isn't worth showing an error state for).
+    -->
+    <!--
+      VISITOR COUNTER — Level 5 addition (rebuilt)
+      Was originally a fetch() call to countapi.xyz — that service has
+      actually shut down, which is exactly why nothing ever appeared
+      (our own error-handling was correctly hiding it, just against a
+      dead API). Rebuilt as a plain <img> pointed at visitorbadge.io
+      instead: no fetch, no JSON, no CORS to worry about — same
+      "free public image service" pattern as the skillicons/ghchart
+      logos elsewhere on this page, which have been solid so far.
+    -->
+    <img class="visitor-counter" id="visitorCounter"
+         alt="Visitor count"
+         src="https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fcomsolodev-1.github.io%2FLevel4_Portfolio%2F&labelColor=%23252525&countColor=%23636363&style=flat&labelStyle=none"
+         hidden />
+    <!-- ↑ the `path=` value is your live site URL, URL-encoded. Update
+         it here if you rename the repo/site — otherwise it'll keep
+         counting hits for the OLD url instead of wherever this
+         actually ends up living. (main.js just wires up show/hide,
+         the URL itself lives only here — one source of truth.) -->
+  </footer>
+
+<!--
+    COMMAND PALETTE — Level 4 addition
+    Hidden by default (the [hidden] attribute). initCommandPalette() in
+    main.js toggles it via Cmd/Ctrl+K or the #cmdkTrigger button, filters
+    .cmdk-item rows as you type, and handles Up/Down/Enter/Esc.
+    role="dialog" + aria-modal so screen readers treat it as a proper
+    modal rather than page content that happens to be on top.
+
+    MULTI-PAGE ADDITION: data-href is either a same-page anchor ("#...")
+    which still smooth-scrolls, or a cross-page link ("projects.html",
+    "index.html#skills") which main.js now navigates to directly —
+    see the updated activate() logic in initCommandPalette().
+  -->
+  <div class="cmdk-overlay" id="cmdkOverlay" hidden>
+    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="cmdk-input-row">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M21 21l-4.3-4.3"/>
+        </svg>
+        <input type="text" id="cmdkInput" class="cmdk-input"
+               placeholder="Jump to a page or section…"
+               autocomplete="off" spellcheck="false" />
+        <kbd class="cmdk-esc">Esc</kbd>
+      </div>
+
+      <ul class="cmdk-list" id="cmdkList">
+        <li class="cmdk-item" data-href="index.html" data-keywords="home top start">
+          <span class="cmdk-item-label">Home</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="index.html#skills" data-keywords="frontend backend database tools stack">
+          <span class="cmdk-item-label">Skills</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="experience.html" data-keywords="work jobs history timeline resume cv download">
+          <span class="cmdk-item-label">Experience & Résumé</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="projects.html" data-keywords="work portfolio case study">
+          <span class="cmdk-item-label">Projects</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="#hero" data-keywords="credentials courses badges milestones achievements">
+          <span class="cmdk-item-label">Certifications & Achievements</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-href="index.html#contact" data-keywords="email message hire talk">
+          <span class="cmdk-item-label">Contact</span>
+          <span class="cmdk-item-hint">Section</span>
+        </li>
+        <li class="cmdk-item" data-filter="theme-toggle" data-keywords="dark light mode theme">
+          <span class="cmdk-item-label">Toggle dark / light mode</span>
+          <span class="cmdk-item-hint">Action</span>
+        </li>
+      </ul>
+
+      <p class="cmdk-empty" id="cmdkEmpty" hidden>No matches — try a different word.</p>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</html>
