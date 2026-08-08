@@ -608,18 +608,27 @@ function initCommandPalette() {
 
     if (item.dataset.href) {
       const href = item.dataset.href;
-      // MULTI-PAGE ADDITION: an in-page anchor ("#projects") still just
-      // smooth-scrolls, but anything else (e.g. "projects.html" or
-      // "index.html#skills") is a different page, so we navigate there
-      // instead of trying (and failing) to querySelector it on this page.
+      // MULTI-PAGE ADDITION (revision): three cases now —
+      //   "#anchor"        → smooth-scroll within this page
+      //   "index.html..."  → Home isn't a "dedicated page", so this
+      //                      still navigates the CURRENT tab there
+      //   anything else     → a dedicated page (projects.html,
+      //                      experience.html, certifications.html) —
+      //                      opens in a NEW TAB with rel=noopener, same
+      //                      rule as the .teaser-cta-link buttons, so
+      //                      using the palette to jump there never
+      //                      loses your place on the current page.
       if (href.startsWith('#')) {
         close();
         // Native smooth scroll — style.css already sets scroll-behavior:
         // smooth on <html>, so a plain hash change is enough here.
         const target = document.querySelector(href);
         if (target) target.scrollIntoView({ behavior: 'smooth' });
-      } else {
+      } else if (href.startsWith('index.html')) {
         window.location.href = href;
+      } else {
+        close();
+        window.open(href, '_blank', 'noopener,noreferrer');
       }
     } else if (item.dataset.filter === 'theme-toggle') {
       close();

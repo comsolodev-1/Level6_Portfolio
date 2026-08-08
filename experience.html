@@ -71,16 +71,18 @@
     </a>
 
     <!--
-      Nav links list. On Home, in-page sections use "#anchor" hrefs;
-      elsewhere they point at "index.html#anchor" or a dedicated page
-      (e.g. "projects.html") since that content no longer lives here.
+      Nav links list. Every item points at a Home section — "#anchor"
+      when we're already on Home, "index.html#anchor" otherwise. None
+      of them link straight to a dedicated page; each teaser section
+      has its own "View all…" button for that (opens in a new tab —
+      see the .teaser-cta-link elements further down).
     -->
     <ul class="nav-links" id="navLinks">
       <li><a href="index.html#skills">Skills</a></li>
-      <li><a href="experience.html" class="active">Experience</a></li>
+      <li><a href="index.html#experience">Experience</a></li>
       <li><a href="index.html#github">GitHub</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="certifications.html">Certifications</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#achievements">Achievements</a></li>
       <li><a href="index.html#contact" class="nav-cta">Let's talk</a></li>
     </ul>
 
@@ -454,10 +456,14 @@
     role="dialog" + aria-modal so screen readers treat it as a proper
     modal rather than page content that happens to be on top.
 
-    MULTI-PAGE ADDITION: data-href is either a same-page anchor ("#...")
-    which still smooth-scrolls, or a cross-page link ("projects.html",
-    "index.html#skills") which main.js now navigates to directly —
-    see the updated activate() logic in initCommandPalette().
+    MULTI-PAGE ADDITION: data-href is one of three things, and
+    activate() in main.js (initCommandPalette) branches on which:
+      • "#anchor"          → smooth-scrolls within the current page
+      • "index.html#..."   → same-tab navigation back to Home
+      • "projects.html" etc → opens that dedicated page in a NEW TAB
+        (rel=noopener) — same rule as the "View all…" teaser buttons,
+        so jumping to a dedicated page from the palette never loses
+        your place on the current one.
   -->
   <div class="cmdk-overlay" id="cmdkOverlay" hidden>
     <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
@@ -482,17 +488,17 @@
           <span class="cmdk-item-label">Skills</span>
           <span class="cmdk-item-hint">Section</span>
         </li>
-        <li class="cmdk-item" data-href="#hero" data-keywords="work jobs history timeline resume cv download">
+        <li class="cmdk-item" data-href="#experience" data-keywords="work jobs history timeline resume cv download">
           <span class="cmdk-item-label">Experience & Résumé</span>
           <span class="cmdk-item-hint">Section</span>
         </li>
         <li class="cmdk-item" data-href="projects.html" data-keywords="work portfolio case study">
           <span class="cmdk-item-label">Projects</span>
-          <span class="cmdk-item-hint">Section</span>
+          <span class="cmdk-item-hint">New tab</span>
         </li>
         <li class="cmdk-item" data-href="certifications.html" data-keywords="credentials courses badges milestones achievements">
           <span class="cmdk-item-label">Certifications & Achievements</span>
-          <span class="cmdk-item-hint">Section</span>
+          <span class="cmdk-item-hint">New tab</span>
         </li>
         <li class="cmdk-item" data-href="index.html#contact" data-keywords="email message hire talk">
           <span class="cmdk-item-label">Contact</span>
