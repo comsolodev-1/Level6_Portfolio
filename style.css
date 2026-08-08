@@ -3838,8 +3838,18 @@ footer {
    Same role as the big .hero section on Home, but far shorter:
    these pages lead with their content, not a second full intro. */
 .page-hero {
-  padding-top: clamp(2.5rem, 6vw, 4rem);
-  padding-bottom: clamp(1.5rem, 3vw, 2rem);
+  /* FIX: this is a <div>, not a <section>, so it never picked up the
+     site's global `section { max-width; margin: auto; padding }`
+     container rule — it was rendering full-bleed edge-to-edge on every
+     screen size instead of the same centered, fluid-padded column as
+     every other section. Mirrors that rule exactly (including reading
+     the same --max-w variable, which the 1280px breakpoint already
+     redefines to 1080px — no separate override needed here), just
+     with its own shorter vertical rhythm since it's a compact intro,
+     not a full section. */
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 5vw, 2.5rem) clamp(1.5rem, 3vw, 2rem);
 }
 
 .page-hero-back {
