@@ -72,9 +72,20 @@ const GITHUB_USERNAME = 'comsolodev-1';
    ─────────────────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Initialize EmailJS with our public key.s
+  // Initialize EmailJS with our public key.
   // Must be called once before any emailjs.send() calls.
-  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  //
+  // BUG FIX (multi-page split): the EmailJS SDK <script> only loads on
+  // index.html now (it's the only page with a contact form) — calling
+  // emailjs.init() unconditionally on the dedicated pages threw a
+  // ReferenceError here, which silently aborted this ENTIRE
+  // DOMContentLoaded callback. Every init*() call below never ran on
+  // those pages: no theme toggle, no nav, and every .fade-in section
+  // stayed stuck at opacity:0 (i.e. the page looked empty). Guarding
+  // this call is what fixes all three symptoms at once.
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
 
   // Boot all features
   initNav();
